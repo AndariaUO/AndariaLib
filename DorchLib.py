@@ -1,6 +1,7 @@
 # coding=utf-8
 
 #DorchLibrary
+#Version 0.0.1
 
 from Assistant import Engine
 from ClassicAssist.Data.Macros.Commands.AbilitiesCommands import *
