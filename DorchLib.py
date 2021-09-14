@@ -1,7 +1,7 @@
 # coding=utf-8
 
 #DorchLibrary
-#Version 0.0.1
+Version = "0.0.1"
 
 from Assistant import Engine
 from ClassicAssist.Data.Macros.Commands.AbilitiesCommands import *
@@ -33,6 +33,13 @@ from ClassicAssist.Data.Macros.Commands.WandCommands import *
 import os
 import json
 import codecs
+import math
+from System.Net import WebClient
+from distutils.version import LooseVersion
+import re
+import webbrowser
+from datetime import datetime, timedelta
+from collections import namedtuple
 
 CONFIG = "Data\Plugins\ClassicAssist\Modules\DorchLib.config"
 
@@ -91,6 +98,8 @@ def DefaultConfig():
 
 def SaveMacroVariable(macro, variable, value):
 	config = LoadConfig()
+	if macro not in config["macros"]:
+		config["macros"][macro] = {}
 	config["macros"][macro][variable] = value
 		
 	SaveConfig(config)
@@ -107,26 +116,122 @@ def LoadMacroVariables(macro, defaultValue = {}):
 		return config["macros"][macro]
 	return defaultValue
 
+Pos = namedtuple('Pos', 'x y z note')
+
+def DictifyRails(rails):
+	res = []
+	for macro in rails:
+		res.append(DictifyMacro(macro))
+	return res
+
+def DictifyMacro(macro):
+	vals = []
+	for rail in macro[1]:
+		vals.append(DictifyRail(rail))
+	return (macro[0], vals)
+
+def DictifyRail(rail):
+	vals = []
+	for pos in rail[1]:
+		vals.append(pos._asdict())
+	return (rail[0], vals)
+
+def UndictifyRails(rails):
+	res = []
+	for macro in rails:
+		res.append(UndictifyMacro(macro))
+	return res
+
+def UndictifyMacro(macro):
+	vals = []
+	for rail in macro[1]:
+		vals.append(UndictifyRail(rail))
+	return (macro[0], vals)
+
+def UndictifyRail(rail):
+	vals = []
+	for pos in rail[1]:
+		vals.append(Pos(**pos))
+	return (rail[0], vals)
+
 def SaveRails(rails):
 	config = LoadConfig()
-	config["Rails"] = rails
+	config["Rails"] = DictifyRails(rails)
 	SaveConfig(config)
 
 def LoadRails(macro = None, rail = None, index = None):
 	config = LoadConfig()
 	if "Rails" in config:
-		rails = config["Rails"]
-		if macro is not None and macro in rails:
-			if rail is not None and rail in rails[rail]:
-				if index is not None and index < len(rails[macro][rail]):
-					return rails[macro][rail][index]
-				return rails[macro][rail]
-			return rails[macro]
+		rails = UndictifyRails(config["Rails"])
+		if macro is not None:
+			mac = next((m for m in rails if m[0] == macro), None)
+			if mac is not None:
+				if rail is not None:
+					rai = next((r for r in mac[1] if r[0] == rail), None)
+					if rai is not None:
+						if index is not None:
+							if index < len(rai[1]):
+								return rai[1][index]
+							return None
+						return rai[1]
+				return mac[1]
 		return rails
-	return {}
+	return []
+
+def PathfindToRail(macro, rail, index, tolerance = -1, maxTries = 30, pause = 1000):
+	return PathfindToPos(LoadRails(macro, rail, index), tolerance, maxTries, pause)
+
+def PathfindToPos(pos, tolerance, maxTries, pause):
+	if tolerance > -1:
+		tries = 0
+		while Distance(pos.x, pos.y, Engine.Player.X, Engine.Player.Y) > tolerance:
+			if not Pathfinding():
+				print "{} - {}".format(tries, Pathfinding())
+				if tries > maxTries:
+					return False
+				tries += 1
+				Pathfind(pos.x, pos.y, pos.z)
+			Pause(pause)
+		return True
+	else:			
+		return Pathfind(pos.x, pos.y, pos.z)
+
+def Distance(x1, y1, x2, y2):
+	return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
 
 def RunAFK():
 	PlayMacro("AFK Gump")
 
 def StopAFK():
 	CloseGump(0x2fb1ee43)
+
+def CheckVersion():
+	url = "https://raw.githubusercontent.com/PoodyCZ/DorchLib/master/DorchLib.py"
+	cl = WebClient()
+	dwnStr = cl.DownloadString(url)
+	todayString = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+	remindTomorrow = LoadMacroVariable("DorchLib", "RemindTomorrow", False)
+	if remindTomorrow:
+		lastVersionCheck = datetime.strptime(LoadMacroVariable("DorchLib", "LastVersionCheck", todayString), '%m/%d/%Y, %H:%M:%S')
+		if lastVersionCheck > datetime.now() - timedelta(days=1):
+			return
+	for line in dwnStr.splitlines():
+		if line.startswith("#Version"):
+			gitVersion = ''
+			for match in re.finditer("\d+(\.\d+)+", line):
+				if len(match.group(0)) > len(gitVersion):
+					gitVersion = match.group(0)
+			ignoreVersion = LoadMacroVariable("DorchLib", "IgnoreVersion", "0.0.0")
+			if LooseVersion(ignoreVersion) == LooseVersion(gitVersion):
+				return
+			if LooseVersion(Version) < LooseVersion(gitVersion):
+				res, index = SelectionPrompt(['Otevřít stránku se stažením nové verze', 'Připomenout zítra', 'Tuto verzi nepřipomínat'], "Je dostupná nová verze DorchLib v{}!".format(gitVersion))
+				if res:
+					if index == 0:
+						webbrowser.open("https://github.com/PoodyCZ/DorchLib", new=1)
+					elif index == 1:
+						SaveMacroVariable("DorchLib", "RemindTomorrow", True)
+						SaveMacroVariable("DorchLib", "LastVersionCheck", todayString)
+					else:
+						SaveMacroVariable("DorchLib", "IgnoreVersion", gitVersion)
+			break
