@@ -121,14 +121,14 @@ Pos = namedtuple('Pos', 'x y z note')
 def DictifyRails(rails):
 	res = []
 	for macro in rails:
-		res.append(DictifyMacro(macro))
+		res.append(DictifyMacroButBetter(macro[1],DictifyRail))
 	return res
 
-def DictifyMacro(macro):
+def DictiyUndictifyMacro(appendee,method):
 	vals = []
-	for rail in macro[1]:
-		vals.append(DictifyRail(rail))
-	return (macro[0], vals)
+	for rail in appendee:
+		vals.append(method(rail))
+	return (appendee, vals)
 
 def DictifyRail(rail):
 	vals = []
@@ -139,14 +139,8 @@ def DictifyRail(rail):
 def UndictifyRails(rails):
 	res = []
 	for macro in rails:
-		res.append(UndictifyMacro(macro))
+		res.append(DictiyUndictifyMacro(macro[0],UndictifyRail))
 	return res
-
-def UndictifyMacro(macro):
-	vals = []
-	for rail in macro[1]:
-		vals.append(UndictifyRail(rail))
-	return (macro[0], vals)
 
 def UndictifyRail(rail):
 	vals = []
