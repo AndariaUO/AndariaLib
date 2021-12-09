@@ -1,7 +1,7 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 #DorchLibrary
-Version = "0.0.1"
+Version = "0.0.2"
 
 from Assistant import Engine
 from ClassicAssist.Data.Macros.Commands.AbilitiesCommands import *
@@ -46,7 +46,22 @@ CONFIG = "Data\Plugins\ClassicAssist\Modules\DorchLib.config"
 Graphics = {
 	"kolovrat": 0x1015,
 	"vlna": 0xdf8,
-	"prize": 0xe1d
+	"prize": 0xe1d,
+	"seno": 0xf36,
+	"valecnak_cerna": 0xCC,
+	"valecnak_bila": 0xE2,
+	"valecnak_zlata": 0xC8,
+	"valecnak_hneda": 0xCC,
+	"slechtak_hneda": 0xE4,
+	"slechtak_pisek": 0xE4,
+	"slechtak_bila": 0xE2,
+	"slechtak_cerna": 0xE2,
+	"pripousteci_hul": 0x13f5,
+	"zlab_n": 0xB41,
+	"zlab_s": 0xB42,
+	"zlab_w": 0xB43,
+	"zlab_e": 0xB44,
+	"sud": 0xE77
 }
 
 def VratTyp(graphics):
@@ -235,3 +250,32 @@ def CheckVersion():
 					else:
 						SaveMacroVariable("DorchLib", "IgnoreVersion", gitVersion)
 			break
+
+def FindTypeList(list, range = -1, loc = None, hue = -1, minamount = -1):
+	if ListExists(list):
+		for type in GetList(list):
+			if FindType(type, range, loc, hue, minamount):
+				return True
+	else:
+		raise NameError("List " + list + " not found")
+			
+	return False
+
+def Makelist(name):
+	if name == "horses":
+		CreateList(name)
+		PushList(name, VratTyp("valecnak_cerna")
+		PushList(name, VratTyp("valecnak_bila")
+		PushList(name, VratTyp("valecnak_zlata")
+		PushList(name, VratTyp("valecnak_hneda")
+		PushList(name, VratTyp("slechtak_hneda")
+		PushList(name, VratTyp("slechtak_pisek")
+		PushList(name, VratTyp("slechtak_bila")
+		PushList(name, VratTyp("slechtak_cerna")
+	elif name == "watersources":
+		CreateList(name)
+		PushList(name, VratTyp("zlab_n"))
+		PushList(name, VratTyp("zlab_s"))
+		PushList(name, VratTyp("zlab_e"))
+		PushList(name, VratTyp("zlab_w"))
+		PushList(name, VratTyp("sud"))
