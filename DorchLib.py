@@ -264,14 +264,14 @@ def FindTypeList(list, range = -1, loc = None, hue = -1, minamount = -1):
 def Makelist(name):
 	if name == "horses":
 		CreateList(name)
-		PushList(name, VratTyp("valecnak_cerna")
-		PushList(name, VratTyp("valecnak_bila")
-		PushList(name, VratTyp("valecnak_zlata")
-		PushList(name, VratTyp("valecnak_hneda")
-		PushList(name, VratTyp("slechtak_hneda")
-		PushList(name, VratTyp("slechtak_pisek")
-		PushList(name, VratTyp("slechtak_bila")
-		PushList(name, VratTyp("slechtak_cerna")
+		PushList(name, VratTyp("valecnak_cerna"))
+		PushList(name, VratTyp("valecnak_bila"))
+		PushList(name, VratTyp("valecnak_zlata"))
+		PushList(name, VratTyp("valecnak_hneda"))
+		PushList(name, VratTyp("slechtak_hneda"))
+		PushList(name, VratTyp("slechtak_pisek"))
+		PushList(name, VratTyp("slechtak_bila"))
+		PushList(name, VratTyp("slechtak_cerna"))
 	elif name == "watersources":
 		CreateList(name)
 		PushList(name, VratTyp("zlab_n"))
