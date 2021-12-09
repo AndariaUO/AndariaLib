@@ -2,7 +2,7 @@
 
 ### Instalace
 
-1. Stáhni zde soubor [DorchLib.py](DorchLib.py)
+1. Stáhni z vrchu soubor DorchLib.py
 2. Vlož soubor do složky
    ```sh
    \AndariaUO\Data\Plugins\ClassicAssist\Modules
