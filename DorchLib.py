@@ -61,7 +61,7 @@ Graphics = {
 	"zlab_s": 0xB42,
 	"zlab_w": 0xB43,
 	"zlab_e": 0xB44,
-	"sud": 0xE77
+	"sud": 0x154D
 }
 
 def VratTyp(graphics):
