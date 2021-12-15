@@ -1,5 +1,9 @@
 <h3 align="center">Dorchaidova knihovna funkcí pro ClassicAssist/h3>
-
+   
+### Skripty jsou zde
+   
+https://github.com/PoodyCZ/DorchScripts
+   
 ### Instalace
 
 1. Stáhni z vrchu soubor DorchLib.py
