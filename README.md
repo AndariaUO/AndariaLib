@@ -1,4 +1,4 @@
-<h3 align="center">Dorchaidova knihovna funkcí pro ClassicAssist/h3>
+<h3 align="center">Dorchaidova knihovna funkcí pro ClassicAssist</h3>
    
 ### Skripty jsou zde
    
