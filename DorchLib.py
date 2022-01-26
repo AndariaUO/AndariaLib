@@ -3,6 +3,8 @@
 #DorchLibrary
 Version = "0.0.2"
 
+from DorchTypes import *
+
 from Assistant import Engine
 from ClassicAssist.Data.Macros.Commands.AbilitiesCommands import *
 from ClassicAssist.Data.Macros.Commands.ActionCommands import *
@@ -30,6 +32,7 @@ from ClassicAssist.Data.Macros.Commands.SpellCommands import *
 from ClassicAssist.Data.Macros.Commands.TargetCommands import *
 from ClassicAssist.Data.Macros.Commands.TimerCommands import *
 from ClassicAssist.Data.Macros.Commands.WandCommands import *
+from ClassicAssist.UO.Objects import *
 import os
 import json
 import codecs
@@ -43,32 +46,75 @@ from collections import namedtuple
 
 CONFIG = "Data\Plugins\ClassicAssist\Modules\DorchLib.config"
 
-Graphics = {
-	"kolovrat": 0x1015,
-	"vlna": 0xdf8,
-	"prize": 0xe1d,
-	"seno": 0xf36,
-	"valecnak_cerna": 0xCC,
-	"valecnak_bila": 0xE2,
-	"valecnak_zlata": 0xC8,
-	"valecnak_hneda": 0xCC,
-	"slechtak_hneda": 0xE4,
-	"slechtak_pisek": 0xE4,
-	"slechtak_bila": 0xE2,
-	"slechtak_cerna": 0xE2,
-	"pripousteci_hul": 0x13f5,
-	"zlab_n": 0xB41,
-	"zlab_s": 0xB42,
-	"zlab_w": 0xB43,
-	"zlab_e": 0xB44,
-	"sud": 0x154D
-}
+def GetType(itemTypeName):
+    if itemTypeName in Graphics:
+        return Graphics[itemTypeName]
+    elif itemTypeName in Types:
+        return Types[itemTypeName]
 
-def VratTyp(graphics):
-	if graphics in Graphics:
-		return Graphics[graphics]
-	else:
-		return 0
+    return 0
+
+def FindTypeBy(itemType, range=None, container=None, minAmount = None):
+    if isinstance(itemType, str):
+        itemType = GetType(itemType)
+        if itemType == 0:
+            print("Type " + itemType + " not exists")
+            return None
+
+        return FindTypeBy(itemType, range, container, minAmount)
+
+    isObjectType = False
+    if isinstance(itemType, ItemTypeClass):
+        isObjectType = True
+
+
+    items = []
+    if container is not None:
+        cont = Engine.Items.GetItem(container)
+
+        if cont.Container == None:
+            WaitForContents(container, 5000)
+
+        if isObjectType:
+            items = cont.Container.SelectEntities(lambda i: itemType.match(i))
+        else:
+            items = cont.Container.SelectEntities(lambda i: i.ID == itemType)
+    else:
+        if isObjectType:
+            items = Engine.Items.SelectEntities(lambda i: itemType.match(i))
+        else:
+            items = Engine.Items.SelectEntities(lambda i: i.ID == itemType)
+
+    if items is None:
+        if isObjectType:
+            items = Engine.Mobiles.SelectEntities(lambda m: itemType.match(m))
+        else:
+            items = Engine.Mobiles.SelectEntities(lambda m: m.ID == itemType)
+
+    if items is None:
+        return None
+
+    returnItems = []
+    for item in items:
+        if range != -1 and range is not None:
+            if item.Distance > range:
+                continue
+
+        if minAmount != -1 and minAmount is not None:
+            if isinstance(item, Item) and item.Count < minAmount:
+                continue
+
+        returnItems.append(item)
+
+    if returnItems == []:
+        return None
+
+    found = returnItems[0]
+    if InIgnoreList(found.Serial):
+        return None
+
+    SetAlias("found", found.Serial)
+    return found
 
 #Funkce pro přesun itemu
 #args - %1 TYPE Itemu
@@ -251,31 +297,13 @@ def CheckVersion():
 						SaveMacroVariable("DorchLib", "IgnoreVersion", gitVersion)
 			break
 
-def FindTypeList(list, range = -1, loc = None, hue = -1, minamount = -1):
-	if ListExists(list):
-		for type in GetList(list):
-			if FindType(type, range, loc, hue, minamount):
-				return True
-	else:
-		raise NameError("List " + list + " not found")
-			
-	return False
+def FindTypeList(list, range=None, loc=None, minamount=None):
+    if list in MultiTypes:
+        for type in MultiTypes[list]:
+            object = FindTypeBy(type, range, loc, minamount)
+            if object is not None:
+                return object
+    else:
+        raise NameError("MultiType " + list + " not found")
 
-def Makelist(name):
-	if name == "horses":
-		CreateList(name)
-		PushList(name, VratTyp("valecnak_cerna"))
-		PushList(name, VratTyp("valecnak_bila"))
-		PushList(name, VratTyp("valecnak_zlata"))
-		PushList(name, VratTyp("valecnak_hneda"))
-		PushList(name, VratTyp("slechtak_hneda"))
-		PushList(name, VratTyp("slechtak_pisek"))
-		PushList(name, VratTyp("slechtak_bila"))
-		PushList(name, VratTyp("slechtak_cerna"))
-	elif name == "watersources":
-		CreateList(name)
-		PushList(name, VratTyp("zlab_n"))
-		PushList(name, VratTyp("zlab_s"))
-		PushList(name, VratTyp("zlab_e"))
-		PushList(name, VratTyp("zlab_w"))
-		PushList(name, VratTyp("sud"))
+    return False

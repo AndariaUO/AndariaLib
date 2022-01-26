@@ -2,4 +2,5 @@
 !.gitignore
 !DorchLib.py
 !README.md
+!DorchTypes.py
 !bin/*
