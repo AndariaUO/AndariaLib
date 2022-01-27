@@ -54,6 +54,18 @@ def GetType(itemTypeName):
 
     return 0
 
+def GetGraphicsIdWithType(itemTypeName):
+	if itemTypeName in Graphics:
+		return Graphics[itemTypeName]
+	elif itemTypeName in Types:
+		type = Types[itemTypeName]
+		if isinstance(type.types, str):
+			return type.types
+		else:
+			return type.types[0]
+
+	return 0
+
 def FindTypeBy(itemType, range=None, container=None, minAmount = None):
     if isinstance(itemType, str):
         itemType = GetType(itemType)
