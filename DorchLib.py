@@ -54,6 +54,18 @@ def GetType(itemTypeName):
 
     return 0
 
+def GetGraphicsIdWithType(itemTypeName):
+	if itemTypeName in Graphics:
+		return Graphics[itemTypeName]
+	elif itemTypeName in Types:
+		type = Types[itemTypeName]
+		if isinstance(type.types, str):
+			return type.types
+		else:
+			return type.types[0]
+
+	return 0
+
 def FindTypeBy(itemType, range=None, container=None, minAmount = None):
     if isinstance(itemType, str):
         itemType = GetType(itemType)
@@ -70,15 +82,13 @@ def FindTypeBy(itemType, range=None, container=None, minAmount = None):
 
     items = []
     if container is not None:
-        cont = Engine.Items.GetItem(container)
-
-        if cont.Container == None:
-            WaitForContents(container, 5000)
+        if isinstance(container, str):
+            container = GetAlias(container)
 
         if isObjectType:
-            items = cont.Container.SelectEntities(lambda i: itemType.match(i))
+            items = Engine.Items.SelectEntities(lambda i: itemType.match(i) and i.IsDescendantOf(container, range))
         else:
-            items = cont.Container.SelectEntities(lambda i: i.ID == itemType)
+            items = Engine.Items.SelectEntities(lambda i: i.ID == itemType and i.IsDescendantOf(container, range))
     else:
         if isObjectType:
             items = Engine.Items.SelectEntities(lambda i: itemType.match(i))
