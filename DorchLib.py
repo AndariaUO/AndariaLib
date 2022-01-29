@@ -48,12 +48,12 @@ from collections import namedtuple
 CONFIG = "Data\Plugins\ClassicAssist\Modules\DorchLib.config"
 
 def GetType(itemTypeName):
-    if itemTypeName in Graphics:
-        return Graphics[itemTypeName]
-    elif itemTypeName in Types:
-        return Types[itemTypeName]
+	if itemTypeName in Graphics:
+		return Graphics[itemTypeName]
+	elif itemTypeName in Types:
+		return Types[itemTypeName]
 
-    return 0
+	return 0
 
 def GetGraphicsIdWithType(itemTypeName):
 	if itemTypeName in Graphics:
@@ -68,71 +68,71 @@ def GetGraphicsIdWithType(itemTypeName):
 	return 0
 
 def FindTypeBy(itemType, range=None, container=None, minAmount = None):
-    if isinstance(itemType, str):
-        itemType = GetType(itemType)
-        if itemType == 0:
-            print("Type " + itemType + " not exists")
-            return None
+	if isinstance(itemType, str):
+		itemType = GetType(itemType)
+		if itemType == 0:
+			print("Type " + itemType + " not exists")
+			return None
 
-        return FindTypeBy(itemType, range, container, minAmount)
+		return FindTypeBy(itemType, range, container, minAmount)
 
-    isObjectType = False
-    if isinstance(itemType, ItemTypeClass):
-        isObjectType = True
+	isObjectType = False
+	if isinstance(itemType, ItemTypeClass):
+		isObjectType = True
 
 
-    items = []
-    if container is not None:
-        if isinstance(container, str):
-            container = GetAlias(container)
+	items = []
+	if container is not None:
+		if isinstance(container, str):
+			container = GetAlias(container)
 
-        if isObjectType:
-            items = Engine.Items.SelectEntities(lambda i: itemType.match(i) and i.IsDescendantOf(container, range))
-        else:
-            items = Engine.Items.SelectEntities(lambda i: i.ID == itemType and i.IsDescendantOf(container, range))
-    else:
-        if isObjectType:
-            items = Engine.Items.SelectEntities(lambda i: itemType.match(i))
-        else:
-            items = Engine.Items.SelectEntities(lambda i: i.ID == itemType)
+		if isObjectType:
+			items = Engine.Items.SelectEntities(lambda i: itemType.match(i) and i.IsDescendantOf(container, range))
+		else:
+			items = Engine.Items.SelectEntities(lambda i: i.ID == itemType and i.IsDescendantOf(container, range))
+	else:
+		if isObjectType:
+			items = Engine.Items.SelectEntities(lambda i: itemType.match(i))
+		else:
+			items = Engine.Items.SelectEntities(lambda i: i.ID == itemType)
 
-    if items is None:
-        if isObjectType:
-            items = Engine.Mobiles.SelectEntities(lambda m: itemType.match(m))
-        else:
-            items = Engine.Mobiles.SelectEntities(lambda m: m.ID == itemType)
+	if items is None:
+		if isObjectType:
+			items = Engine.Mobiles.SelectEntities(lambda m: itemType.match(m))
+		else:
+			items = Engine.Mobiles.SelectEntities(lambda m: m.ID == itemType)
 
-    if items is None:
-        return None
+	if items is None:
+		return None
 
-    returnItems = []
-    for item in items:
-        if range != -1 and range is not None:
-            if item.Distance > range:
-                continue
+	returnItems = []
+	for item in items:
+		if range != -1 and range is not None:
+			if item.Distance > range:
+				continue
 
-        if minAmount != -1 and minAmount is not None:
-            if isinstance(item, Item) and item.Count < minAmount:
-                continue
+		if minAmount != -1 and minAmount is not None:
+			if isinstance(item, Item) and item.Count < minAmount:
+				continue
 
-        returnItems.append(item)
+		returnItems.append(item)
 
-    if returnItems == []:
-        return None
+	if returnItems == []:
+		return None
 
-    found = sorted(returnItems, key=lambda i: i.Distance, reverse=False)[0]
-    if InIgnoreList(found.Serial):
-        return None
+	found = sorted(returnItems, key=lambda i: i.Distance, reverse=False)[0]
+	if InIgnoreList(found.Serial):
+		return None
 
-    SetAlias("found", found.Serial)
-    return found
+	SetAlias("found", found.Serial)
+	return found
 
 #Funkce pro přesun itemu
 #args - %1 TYPE Itemu
-#       %2 UID kontejneru odkud
-#       %3 UID kontejneru kam
-#       %4 CISLO kolik, bere i klíčová slova All/Weight, tedy Vše nebo Podle Váhy
-#       %5 CISLO barva
+#	   %2 UID kontejneru odkud
+#	   %3 UID kontejneru kam
+#	   %4 CISLO kolik, bere i klíčová slova All/Weight, tedy Vše nebo Podle Váhy
+#	   %5 CISLO barva
 def PresunItem(type, src, tar, amount = 1, color = -1):
 	if CountType(type, src) <= 0:
 		return False
@@ -153,7 +153,7 @@ def CheckDistance(alias, d):
 	if Distance(alias) > d:
 		ConfirmPrompt("Jsi moc daleko od " + alias + ".\nKlikni Okay až budeš maximálně " + str(d) + " polí daleko")
 		CheckDistance(alias, d)
-    
+	
 def SaveConfig(config):
 	with codecs.open(CONFIG, "w", encoding='utf-8') as config_file:
 		json.dump(config, config_file, indent=4, sort_keys=True, ensure_ascii=False)
@@ -254,7 +254,7 @@ def PathfindToRail(macro, rail, index, tolerance = -1, maxTries = 30, pause = 10
 	return PathfindToPos(LoadRails(macro, rail, index), tolerance, maxTries, pause)
 
 def __current_milli_time():
-    return round(time.time() * 1000)
+	return round(time.time() * 1000)
 
 def WalkTo(posX, posY, posZ, timeout=8000):
 	cMStart = __current_milli_time()
@@ -279,7 +279,7 @@ def PathfindToPos(pos, tolerance, maxTries, pause):
 		tries = 0
 		while Distance(pos.x, pos.y, Engine.Player.X, Engine.Player.Y) > tolerance:
 			if not Pathfinding():
-				print "{} - {}".format(tries, Pathfinding())
+				print("{} - {}".format(tries, Pathfinding()))
 				if tries > maxTries:
 					return False
 				tries += 1
@@ -329,23 +329,37 @@ def CheckVersion():
 						SaveMacroVariable("DorchLib", "IgnoreVersion", gitVersion)
 			break
 
+__lastOpenedDoors = None
+
 def ToggleNearestDoor():
+	global __lastOpenedDoors
+
+	if __lastOpenedDoors is not None:
+		FindObject(__lastOpenedDoors, range=2)
+		if GetAlias("found") != 0:
+			HeadMsg("Tyhle beru", GetAlias("found"))
+			UseObject(GetAlias("found"))
+			__lastOpenedDoors = None
+			return True
+
 	nearestDoor = FindTypeList("doors", 2)
-	if nearestDoor is None:
+	if nearestDoor is False:
 		print("Žádné dveře blízko")
 		return False
 
 	HeadMsg("Tyhle beru", nearestDoor.Serial)
 	UseObject(nearestDoor.Serial)
+	__lastOpenedDoors = nearestDoor.Serial
+
 	return True
 
 def FindTypeList(list, range=None, loc=None, minamount=None):
-    if list in MultiTypes:
-        for type in MultiTypes[list]:
-            object = FindTypeBy(type, range, loc, minamount)
-            if object is not None:
-                return object
-    else:
-        raise NameError("MultiType " + list + " not found")
+	if list in MultiTypes:
+		for type in MultiTypes[list]:
+			object = FindTypeBy(type, range, loc, minamount)
+			if object is not None:
+				return object
+	else:
+		raise NameError("MultiType " + list + " not found")
 
-    return False
+	return False
