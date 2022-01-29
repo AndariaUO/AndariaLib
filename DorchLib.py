@@ -42,6 +42,7 @@ from distutils.version import LooseVersion
 import re
 import webbrowser
 from datetime import datetime, timedelta
+import time
 from collections import namedtuple
 
 CONFIG = "Data\Plugins\ClassicAssist\Modules\DorchLib.config"
@@ -252,8 +253,29 @@ def LoadRails(macro = None, rail = None, index = None):
 def PathfindToRail(macro, rail, index, tolerance = -1, maxTries = 30, pause = 1000):
 	return PathfindToPos(LoadRails(macro, rail, index), tolerance, maxTries, pause)
 
+def __current_milli_time():
+    return round(time.time() * 1000)
+
+def WalkTo(posX, posY, posZ, timeout=8000):
+	cMStart = __current_milli_time()
+	Pathfind(posX, posY, posZ)
+
+	attempts = 1
+	while Engine.Player.X != posX or Engine.Player.Y != posY or Engine.Player.Z != posZ:
+		Pause(500)
+		if attempts >= 10:
+			attempts = 1
+			Pathfind(posX, posY, posZ)
+
+		cMCurrent = __current_milli_time()
+		if cMCurrent - cMStart > timeout:
+			print("Timeout with WalkTo function")
+			return False
+
+	return True
+
 def PathfindToPos(pos, tolerance, maxTries, pause):
-	if tolerance > -1:
+	if tolerance > 0:
 		tries = 0
 		while Distance(pos.x, pos.y, Engine.Player.X, Engine.Player.Y) > tolerance:
 			if not Pathfinding():
@@ -265,7 +287,7 @@ def PathfindToPos(pos, tolerance, maxTries, pause):
 			Pause(pause)
 		return True
 	else:			
-		return Pathfind(pos.x, pos.y, pos.z)
+		return WalkTo(pos.x, pos.y, pos.z)
 
 def Distance(x1, y1, x2, y2):
 	return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
