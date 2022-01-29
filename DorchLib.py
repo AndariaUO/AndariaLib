@@ -329,6 +329,16 @@ def CheckVersion():
 						SaveMacroVariable("DorchLib", "IgnoreVersion", gitVersion)
 			break
 
+def ToggleNearestDoor():
+	nearestDoor = FindTypeList("doors", 2)
+	if nearestDoor is None:
+		print("Žádné dveře blízko")
+		return False
+
+	HeadMsg("Tyhle beru", nearestDoor.Serial)
+	UseObject(nearestDoor.Serial)
+	return True
+
 def FindTypeList(list, range=None, loc=None, minamount=None):
     if list in MultiTypes:
         for type in MultiTypes[list]:
