@@ -2,7 +2,7 @@
 
 class ItemTypeClass:
 
-    def __init__(self, types, names = None, colors = None, notNames = None):
+    def __init__(self, types, names=None, colors=None, notNames=None):
         self.types = types
         self.names = names
         self.colors = colors
@@ -48,6 +48,7 @@ class ItemTypeClass:
             return True
         else:
             return itemName.lower().find(self.names.lower()) == -1
+
 
 Graphics = {
     "log": 7133,
@@ -226,19 +227,19 @@ Graphics = {
     "knihaChaosu": 9100,
     "knihaMaterie": 8788,
     "valecnak_cerna": 0xCC,
-	"valecnak_bila": 0xE2,
-	"valecnak_zlata": 0xC8,
-	"valecnak_hneda": 0xCC,
-	"slechtak_hneda": 0xE4,
-	"slechtak_pisek": 0xE4,
-	"slechtak_bila": 0xE2,
-	"slechtak_cerna": 0xE2,
-	"pripousteci_hul": 0x13f5,
-	"zlab_n": 0xB41,
-	"zlab_s": 0xB42,
-	"zlab_w": 0xB43,
-	"zlab_e": 0xB44,
-	"sud": 0x154D
+    "valecnak_bila": 0xE2,
+    "valecnak_zlata": 0xC8,
+    "valecnak_hneda": 0xCC,
+    "slechtak_hneda": 0xE4,
+    "slechtak_pisek": 0xE4,
+    "slechtak_bila": 0xE2,
+    "slechtak_cerna": 0xE2,
+    "pripousteci_hul": 0x13f5,
+    "zlab_n": 0xB41,
+    "zlab_s": 0xB42,
+    "zlab_w": 0xB43,
+    "zlab_e": 0xB44,
+    "sud": 0x154D
 }
 
 colorTmavo = 1109
@@ -288,20 +289,26 @@ Types = {
     "lektvarSlabsiSila": ItemTypeClass(Graphics["lektvarSila"], ["Slabsi Lektvar Sily", "Slabsi Lektvary Sily"]),
     "lektvarSila": ItemTypeClass(Graphics["lektvarSila"], "Sily", None, "Slabsi"),
     "lektvarSilaVelky": ItemTypeClass(Graphics["lektvarVelky"], "Sily", 0),
-    "lektvarSlabsiDoplneniMany": ItemTypeClass(Graphics["lektvarMana"], ["Slabsi Lektvar Doplneni Many", "Slabsi Lektvary Doplneni Many"]),
+    "lektvarSlabsiDoplneniMany": ItemTypeClass(Graphics["lektvarMana"],
+                                               ["Slabsi Lektvar Doplneni Many", "Slabsi Lektvary Doplneni Many"]),
     "lektvarDoplneniMany": ItemTypeClass(Graphics["lektvarMana"], "Doplneni Many", None, "Slabsi"),
     "lektvarDoplneniManyVelky": ItemTypeClass(Graphics["lektvarVelky"], "Doplneni Many", 499),
-    "lektvarSlabsiMoudrost": ItemTypeClass(Graphics["lektvarMoudrost"], ["Slabsi Lektvar Moudro", "Slabsi Lektvary Moudrost"]),
+    "lektvarSlabsiMoudrost": ItemTypeClass(Graphics["lektvarMoudrost"],
+                                           ["Slabsi Lektvar Moudro", "Slabsi Lektvary Moudrost"]),
     "lektvarMoudrost": ItemTypeClass(Graphics["lektvarMoudrost"], "Moudrost", None, "Slabsi"),
     "lektvarMoudrostVelky": ItemTypeClass(Graphics["lektvarVelky"], "Moudrost", 1276),
     "lektvarSlabsiVybusny": ItemTypeClass(Graphics["lektvarVybusny"], "Slabší Výbušn"),
     "lektvarVybusny": ItemTypeClass(Graphics["lektvarVybusny"], "Vybušn"),
     "lektvarVybusnyVelky": ItemTypeClass(Graphics["lektvarVelky"], "Výbušn", 1377),
-    "lektvarSlabsiTranz": ItemTypeClass(Graphics["vypuklyLektvar"], ["Slabsi Lektvar Tranzu", "Slabsi Lektvary Tranzu"]),
-    "lektvarTranz": ItemTypeClass(Graphics["vypuklyLektvar"], "Tranz", None, ["Slabsi Lektvar Tranzu", "Slabsi Lektvary Tranzu"]),
+    "lektvarSlabsiTranz": ItemTypeClass(Graphics["vypuklyLektvar"],
+                                        ["Slabsi Lektvar Tranzu", "Slabsi Lektvary Tranzu"]),
+    "lektvarTranz": ItemTypeClass(Graphics["vypuklyLektvar"], "Tranz", None,
+                                  ["Slabsi Lektvar Tranzu", "Slabsi Lektvary Tranzu"]),
     "lektvarTranzVelky": ItemTypeClass(Graphics["lektvarVelky"], "Tranz", 1423),
-    "lektvarSlabsiObnova": ItemTypeClass(Graphics["lektvarObnova"], ["Slabsi Lektvar Obnovy", "Slabsi Lektvary Obnovy"]),
-    "lektvarObnova": ItemTypeClass(Graphics["lektvarObnova"], "Obnovy", None, ["Slabsi Lektvar Obnovy", "Slabsi Lektvary Obnovy"]),
+    "lektvarSlabsiObnova": ItemTypeClass(Graphics["lektvarObnova"],
+                                         ["Slabsi Lektvar Obnovy", "Slabsi Lektvary Obnovy"]),
+    "lektvarObnova": ItemTypeClass(Graphics["lektvarObnova"], "Obnovy", None,
+                                   ["Slabsi Lektvar Obnovy", "Slabsi Lektvary Obnovy"]),
     "lektvarObnovaVelky": ItemTypeClass(Graphics["lektvarVelky"], "Obnovy", 33),
     "lektvarHrotoveJedy": ItemTypeClass(Graphics["lektvarHrotoveJedy"], ["Hrotove Jedy", "Hrotovy Jed"]),
     "lektvarRozptyleniMagie": ItemTypeClass(Graphics["lektvarSila"], "Rozptyleni", 1151),
@@ -363,4 +370,59 @@ MultiTypes = {
         Graphics["zlab_w"],
         Graphics["sud"],
     ],
+    "doors": [
+        1661, 1653, 1663, 1664, 1662, 1663, 2567, 2134, 4239, 1757, 1758, 1653, 1654, 1655, 1656, 1711, 1712,
+        1767, 1768,
+        1671, 8174, 1672, 1677, 1669, 8183, 8184, 2160, 2158, 1709, 1710, 1705, 1706, 1765, 1766, 1775, 1773,
+        1776, 1774, 9141, 9144, 9138, 9137,
+        9135, 9139, 1779, 1780, 1657, 1658, 1737, 1739, 2151, 2150, 2156, 2154, 2155, 2157, 2133, 2132, 1703,
+        1701, 1704, 1702,
+        4242  # packa,
+    ],
+    "ovoce": [
+        Graphics["hospinky"], Graphics["abrosie"], Graphics["datle"], Types["kokosovyOrech"],
+        Graphics["banany"], Graphics["citrony"], Graphics["cajovyListecek"], Graphics["kukurice"], Graphics["limetky"],
+    ],
+    "hulky": [
+        Graphics["hulky"], Graphics["hulky2"], Graphics["hulky3"], Graphics["hulky4"],
+    ],
+    "stromy": [15189, 3242, 870, 3222, 3221, 15190, 15186, Graphics["jahody"], 15182, 3478, 3486, 3482,
+               871  # krvavy mech
+               ],
+    "gems": [
+        Graphics["gemsCitrin"], Graphics["gemsDiamant"], Graphics["gemsRubin"], Graphics["gemsHvezdSafir"],
+        Graphics["gemsSmaragd"], Graphics["gemsTurmalin"], Graphics["gemsJantar"], Graphics["gemsSafir"],
+        Graphics["gemsAmetyst"],
+        Graphics["gems"], Graphics["gems3"], Graphics["gems4"],
+    ],
+    "throphy": [15170, Graphics["kokosoveOrechy"], 5640, 7408, 15174, 5357, ],
+    "rudy": [
+        ItemTypeClass([6585, 6584, 6586, 3978, 6583], ["ruda", "rudy"])
+    ],
+    "zakladRegy": [
+        Graphics["mandragora"], Graphics["krvavyMech"], Graphics["sirnyPrach"], Graphics["perly"], Graphics["pavuciny"],
+        Graphics["rulik"], Graphics["cesneky"], Graphics["krvaveJikry"], Graphics["urodnePrsti"], Graphics["zensen"],
+    ],
+    "esence": [
+        Types["esenceVody"], Types["esenceZeme"], Types["esenceSlizu"],
+    ],
+    "rostlinkyZasazene": [
+        Types["rostlinkaZasazenaMandragora"], Types["rostlinkaZasazenaRulik"], Graphics["rostlinkaZasazenaZensen"],
+        Graphics["rostlinkaZasazenaCesnek"], Graphics["rostlinkaZasazenaBavlna"],
+    ],
+    "rostlinkyVytrzena": [
+        Graphics["rostlinkaVytrzenaZensen"], Graphics["rostlinkaVytrzenaMandragora"],
+        Graphics["rostlinkaVytrzenaCesnek"],
+    ],
+    "lektvary": [
+        Types["lektvarSlabsiSila"], Types["lektvarSlabsiLecivy"], Types["lektvarSlabsiJed"],
+        Types["lektvarSlabsiOsvezeni"], Types["lektvarSlabsiLecivy"], Types["lektvarSlabsiJed"],
+        Types["lektvarSlabsiProtijed"], Types["lektvarSlabsiHbitost"], Types["lektvarHbitost"],
+        # --Types["lektvarHbitostVelky"], Types["lektvarProtijed"], Types["lektvarProtijedVelky"],
+        # --Types["lektvarSlabsiSila"], Types["lektvarSila"], Types["lektvarSilaVelky"],
+        # --Types["lektvarSlabsiMoudrost"], Types["lektvarMoudrost"], Types["lektvarSlabsiVybusny"],
+        # --Types["lektvarVybusny"], Types["lektvarVybusnyVelky"], Types["lektvarOsvezeni"],
+        Types["lektvarLecivy"], Types["lektvarLecivyVelky"], Types["lektvarJed"],
+        # --Types["lektvarJedVelky"], Types["lektvarSkrytiPovesti"],
+    ]
 }
