@@ -120,7 +120,7 @@ def FindTypeBy(itemType, range=None, container=None, minAmount = None):
     if returnItems == []:
         return None
 
-    found = returnItems[0]
+    found = sorted(returnItems, key=lambda i: i.Distance, reverse=False)[0]
     if InIgnoreList(found.Serial):
         return None
 
