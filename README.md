@@ -6,7 +6,7 @@ https://github.com/PoodyCZ/DorchScripts
    
 ### Instalace
 
-1. Stáhni z vrchu soubor DorchLib.py
+1. Stáhni z vrchu soubor DorchLib.py a DorchTypes.py
 2. Vlož soubor do složky
    ```sh
    \AndariaUO\Data\Plugins\ClassicAssist\Modules
