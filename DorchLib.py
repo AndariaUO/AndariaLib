@@ -193,6 +193,7 @@ def LoadMacroVariables(macro, defaultValue = {}):
 	return defaultValue
 
 Pos = namedtuple('Pos', 'x y z note')
+OpenClosestDoor = namedtuple('OpenClosestDoor', 'door note')
 
 def DictifyRails(rails):
 	res = []
@@ -227,7 +228,10 @@ def UndictifyMacro(macro):
 def UndictifyRail(rail):
 	vals = []
 	for pos in rail[1]:
-		vals.append(Pos(**pos))
+		if "door" in pos.keys():
+			vals.append(OpenClosestDoor(**pos))
+		else:
+			vals.append(Pos(**pos))
 	return (rail[0], vals)
 
 def SaveRails(rails):
@@ -279,6 +283,16 @@ def WalkTo(posX, posY, posZ, timeout=8000):
 	return True
 
 def PathfindToPos(pos, tolerance, maxTries, pause):
+	if isinstance(pos, list):
+		for onePos in pos:
+			PathfindToPos(onePos, tolerance, maxTries, pause)
+		return True
+
+	if isinstance(pos, OpenClosestDoor):
+		ToggleNearestDoor()
+		Pause(200)
+		return True
+
 	if tolerance > 0:
 		tries = 0
 		while Distance(pos.x, pos.y, Engine.Player.X, Engine.Player.Y) > tolerance:
