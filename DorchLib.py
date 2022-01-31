@@ -280,6 +280,8 @@ def WalkTo(posX, posY, posZ, timeout=8000):
 			print("Timeout with WalkTo function")
 			return False
 
+		attempts = attempts + 1
+
 	return True
 
 def PathfindToPos(pos, tolerance, maxTries, pause):
