@@ -33,6 +33,7 @@ from ClassicAssist.Data.Macros.Commands.TargetCommands import *
 from ClassicAssist.Data.Macros.Commands.TimerCommands import *
 from ClassicAssist.Data.Macros.Commands.WandCommands import *
 from ClassicAssist.UO.Objects import *
+from ClassicAssist.UO.Data import Direction
 import os
 import json
 import codecs
@@ -67,7 +68,7 @@ def GetGraphicsIdWithType(itemTypeName):
 
 	return 0
 
-def FindTypeBy(itemType, range=None, container=None, minAmount = None):
+def FindTypeBy(itemType, range=None, container=None, minAmount = None, returnAllItems = False):
 	if isinstance(itemType, str):
 		itemType = GetType(itemType)
 		if itemType == 0:
@@ -115,15 +116,18 @@ def FindTypeBy(itemType, range=None, container=None, minAmount = None):
 			if isinstance(item, Item) and item.Count < minAmount:
 				continue
 
-		returnItems.append(item)
+		if not InIgnoreList(item.Serial):
+			returnItems.append(item)
 
 	if returnItems == []:
 		return None
 
-	found = sorted(returnItems, key=lambda i: i.Distance, reverse=False)[0]
-	if InIgnoreList(found.Serial):
-		return None
+	sortedByDistance = sorted(returnItems, key=lambda i: i.Distance, reverse=False)
 
+	if returnAllItems:
+		return sortedByDistance
+
+	found = sortedByDistance[0]
 	SetAlias("found", found.Serial)
 	return found
 
@@ -342,7 +346,49 @@ def ToggleNearestDoor():
 			__lastOpenedDoors = None
 			return True
 
-	nearestDoor = FindTypeList("doors", 2)
+	closeDoors = FindTypeList("doors", 2, returnAllItems=True)
+	minDistance = 5
+	for door in closeDoors:
+		if door.Distance < minDistance:
+			minDistance = door.Distance
+
+	doorsToCheck = []
+	for door in closeDoors:
+		if door.Distance == minDistance:
+			doorsToCheck.append(door)
+
+	nearestDoor = None
+	if len(doorsToCheck) == 0:
+		nearestDoor = False
+	elif len(doorsToCheck) == 1:
+		nearestDoor = doorsToCheck[0]
+	else:
+		dir = Engine.Player.Direction
+
+		for door in doorsToCheck:
+			frontOf = Engine.Player.X + 1
+			if (dir == Direction.West or dir == Direction.Southeast or dir == Direction.Northeast) and frontOf == door.X and Engine.Player.Y == door.Y:
+				nearestDoor = door
+				break
+
+			frontOf = Engine.Player.X - 1
+			if (dir == Direction.East or dir == Direction.Southwest or dir == Direction.Northwest) and frontOf == door.X and Engine.Player.Y == door.Y:
+				nearestDoor = door
+				break
+
+			frontOf = Engine.Player.Y + 1
+			if dir == Direction.South and Engine.Player.X == door.X and frontOf == door.Y:
+				nearestDoor = door
+				break
+
+			frontOf = Engine.Player.Y - 1
+			if dir == Direction.North and Engine.Player.X == door.X and frontOf == door.Y:
+				nearestDoor = door
+				break
+
+		if nearestDoor is None:
+			nearestDoor = doorsToCheck[0]
+
 	if nearestDoor is False:
 		print("Žádné dveře blízko")
 		return False
@@ -353,12 +399,20 @@ def ToggleNearestDoor():
 
 	return True
 
-def FindTypeList(list, range=None, loc=None, minamount=None):
+def FindTypeList(list, range=None, loc=None, minamount=None, returnAllItems = False):
+	if returnAllItems:
+		multiItems = []
 	if list in MultiTypes:
 		for type in MultiTypes[list]:
-			object = FindTypeBy(type, range, loc, minamount)
-			if object is not None:
-				return object
+			objects = FindTypeBy(type, range, loc, minamount, returnAllItems)
+			if objects is not None:
+				if returnAllItems:
+					for object in objects:
+						multiItems.append(object)
+				else:
+					return objects
+		if returnAllItems:
+			return multiItems
 	else:
 		raise NameError("MultiType " + list + " not found")
 
