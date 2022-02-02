@@ -399,22 +399,22 @@ def ToggleNearestDoor():
 
 		for door in doorsToCheck:
 			frontOf = Engine.Player.X + 1
-			if (dir == Direction.West or dir == Direction.Southeast or dir == Direction.Northeast) and frontOf == door.X and Engine.Player.Y == door.Y:
+			if (dir == Direction.West or dir == Direction.Southeast or dir == Direction.Northeast) and frontOf == door.X and Engine.Player.Y == door.Y and abs(Engine.Player.Z - door.Z) < 5:
 				nearestDoor = door
 				break
 
 			frontOf = Engine.Player.X - 1
-			if (dir == Direction.East or dir == Direction.Southwest or dir == Direction.Northwest) and frontOf == door.X and Engine.Player.Y == door.Y:
+			if (dir == Direction.East or dir == Direction.Southwest or dir == Direction.Northwest) and frontOf == door.X and Engine.Player.Y == door.Y and abs(Engine.Player.Z - door.Z) < 5:
 				nearestDoor = door
 				break
 
 			frontOf = Engine.Player.Y + 1
-			if dir == Direction.South and Engine.Player.X == door.X and frontOf == door.Y:
+			if dir == Direction.South and Engine.Player.X == door.X and frontOf == door.Y and abs(Engine.Player.Z - door.Z) < 5:
 				nearestDoor = door
 				break
 
 			frontOf = Engine.Player.Y - 1
-			if dir == Direction.North and Engine.Player.X == door.X and frontOf == door.Y:
+			if dir == Direction.North and Engine.Player.X == door.X and frontOf == door.Y and abs(Engine.Player.Z - door.Z) < 5:
 				nearestDoor = door
 				break
 
