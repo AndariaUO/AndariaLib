@@ -1,12 +1,36 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
+
+from DorchLib import NormalizeString
 
 class ItemTypeClass:
 
 	def __init__(self, types, names=None, colors=None, notNames=None):
 		self.types = types
-		self.names = names
+		if names is not None:
+			if isinstance(names, list):
+				namesTo = []
+				for name in names:
+					namesTo.append(NormalizeString(name))
+
+				self.names = namesTo
+			else:
+				self.names = NormalizeString(names)
+		else:
+			self.names = None
+
 		self.colors = colors
-		self.notNames = notNames
+
+		if notNames is not None:
+			if isinstance(notNames, list):
+				notNamesTo = []
+				for notName in notNames:
+					notNamesTo.append(NormalizeString(notName))
+
+				self.notNames = notNamesTo
+			else:
+				self.notNames = NormalizeString(notNames)
+		else:
+			self.notNames = None
 
 	def match(self, item):
 		matched = False
@@ -16,6 +40,9 @@ class ItemTypeClass:
 					matched = True
 		else:
 			matched = self.types == item.ID
+
+		if matched is False:
+			return False
 
 		matchedName = True
 		if self.names is not None:
@@ -32,22 +59,24 @@ class ItemTypeClass:
 		return matched and matchedName and matchedColor and matchedNotName
 
 	def matchName(self, itemName):
+		itemName = NormalizeString(itemName)
 		if isinstance(self.names, list):
 			for name in self.names:
-				if itemName.lower().find(name.lower()) != -1:
+				if itemName.find(name) != -1:
 					return True
 		else:
-			return itemName.lower().find(self.names.lower()) != -1
+			return itemName.find(self.names) != -1
 
 	def notMatchName(self, itemName):
+		itemName = NormalizeString(itemName)
 		if isinstance(self.notNames, list):
 			for name in self.notNames:
-				if itemName.lower().find(name.lower()) != -1:
+				if itemName.find(name) != -1:
 					return False
 
 			return True
 		else:
-			return itemName.lower().find(self.names.lower()) == -1
+			return itemName.find(self.notNames) == -1
 
 
 Graphics = {
