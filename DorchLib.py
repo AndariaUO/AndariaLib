@@ -45,6 +45,7 @@ import webbrowser
 from datetime import datetime, timedelta
 import time
 from collections import namedtuple
+import unicodedata
 
 CONFIG = "Data\Plugins\ClassicAssist\Modules\DorchLib.config"
 
@@ -55,6 +56,21 @@ def GetType(itemTypeName):
 		return Types[itemTypeName]
 
 	return 0
+
+REMOVE_STRINGS = {
+	"š": "s",
+	"é": "e",
+	"": "s",
+	"í": "i",
+	"ý": "y",
+}
+
+def NormalizeString(string):
+	returnString = string
+	for fr, to in REMOVE_STRINGS.items():
+		returnString = returnString.replace(fr, to)
+
+	return returnString.lower().strip()
 
 def GetGraphicsIdWithType(itemTypeName):
 	if itemTypeName in Graphics:
