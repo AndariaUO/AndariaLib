@@ -187,7 +187,7 @@ Graphics = {
 	"kosti": 3966,
 	"lektvarOsvezeni": 3851,
 	"lektvarLecivy": 3852,
-	"lektvarVybusny": 3853,
+	"lektvarVybusny": 0xf0d,
 	"lektvarSila": 3849,
 	"lektvarProtijed": 3847,
 	"lektvarMoudrost": 3842,
@@ -195,7 +195,7 @@ Graphics = {
 	"lektvarHbitost": 3848,
 	"lektvarSvetlo": 3846,
 	"lektvarSkrytiPovesti": 3844,
-	"lektvarVelky": 15348,
+	"lektvarVelky": 0x3bf4,
 	"platNohavice": 5137,
 	"platRukavice": 5144,
 	"platRukavy": 5136,
@@ -282,7 +282,16 @@ Graphics = {
 	"zlab_s": 0xB42,
 	"zlab_w": 0xB43,
 	"zlab_e": 0xB44,
-	"sud": 0x154D
+	"sud": 0x154D,
+	"chleba": 0x103b,
+	"pizza": 0x1040,
+	"soskaVeverky": 0x2d97,
+	"soskaKone": 0x2d9c,
+	"soskaFretky": 0x2d98,
+	"origamiMotyl": 0x283b,
+	"origamiMotyl2": 0x2839,
+	"pivo": 0x99f,
+	"lahevVino": 0x9c7,
 }
 
 colorTmavo = 1109
@@ -340,8 +349,8 @@ Types = {
 										   ["Slabsi Lektvar Moudro", "Slabsi Lektvary Moudrost"]),
 	"lektvarMoudrost": ItemTypeClass(Graphics["lektvarMoudrost"], "Moudrost", None, "Slabsi"),
 	"lektvarMoudrostVelky": ItemTypeClass(Graphics["lektvarVelky"], "Moudrost", 1276),
-	"lektvarSlabsiVybusny": ItemTypeClass(Graphics["lektvarVybusny"], "Slabší Výbušn"),
-	"lektvarVybusny": ItemTypeClass(Graphics["lektvarVybusny"], "Vybušn"),
+	"lektvarSlabsiVybusny": ItemTypeClass(Graphics["lektvarVybusny"], ["Slabsi Vybusn"]),
+	"lektvarVybusny": ItemTypeClass(Graphics["lektvarVybusny"], "Vybušn", None, ["Slabsi Vybus"]),
 	"lektvarVybusnyVelky": ItemTypeClass(Graphics["lektvarVelky"], "Výbušn", 1377),
 	"lektvarSlabsiTranz": ItemTypeClass(Graphics["vypuklyLektvar"],
 										["Slabsi Lektvar Tranzu", "Slabsi Lektvary Tranzu"]),
@@ -362,6 +371,7 @@ Types = {
 	"lektvarSlabsiJed": ItemTypeClass(Graphics["lektvarJed"], "Slabsi Jed"),
 	"lektvarJed": ItemTypeClass(Graphics["lektvarJed"], "Jed", None, ["Slabsi jed", "Silny jed", "Silne jedy"]),
 	"lektvarJedVelky": ItemTypeClass(Graphics["lektvarJed"], ["Silny Jed", "Silne Jedy"]),
+	"lektvarJedSmrtelny": ItemTypeClass(Graphics["lektvarVelky"], ["Smrtelny Jed", "Smrtelne Jedy"]),
 	"lektvarSkrytiPovesti": ItemTypeClass(Graphics["lektvarSkrytiPovesti"], "Skryti Povesti"),
 	"misicka": ItemTypeClass(Graphics["nadoba"], "Misicka Le"),
 	"svitekOhnivaKoule": ItemTypeClass(Graphics["svitek"], "Ohnivá koule", 2878),
@@ -393,6 +403,9 @@ Types = {
 	"kokosovyOrech": ItemTypeClass(Graphics["kokosoveOrechy"], "Kokosov"),
 	"magickaKnihaChaosu": ItemTypeClass(Graphics["knihaChaosu"], "Chaosu"),
 	"magickaKnihaMaterie": ItemTypeClass(Graphics["knihaMaterie"], "Materie"),
+	"hnedePivo": ItemTypeClass(Graphics["pivo"], "Hnede"),
+	"jantarovePivo": ItemTypeClass(Graphics["pivo"], "Jantarov"),
+	"vino": ItemTypeClass(Graphics["lahevVino"], "vin"),
 }
 
 MultiTypes = {
