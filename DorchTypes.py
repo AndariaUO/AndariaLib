@@ -1,6 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from DorchLib import NormalizeString
+import unicodedata
+REMOVE_STRINGS = {
+	"š": "s",
+	"é": "e",
+	"": "s",
+	"í": "i",
+	"ý": "y",
+}
+
+def NormalizeString(string):
+	returnString = string
+	for fr, to in REMOVE_STRINGS.items():
+		returnString = returnString.replace(fr, to)
+
+	return returnString.lower().strip()
 
 class ItemTypeClass:
 

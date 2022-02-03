@@ -45,7 +45,6 @@ import webbrowser
 from datetime import datetime, timedelta
 import time
 from collections import namedtuple
-import unicodedata
 
 CONFIG = "Data\Plugins\ClassicAssist\Modules\DorchLib.config"
 
@@ -57,20 +56,21 @@ def GetType(itemTypeName):
 
 	return 0
 
-REMOVE_STRINGS = {
-	"š": "s",
-	"é": "e",
-	"": "s",
-	"í": "i",
-	"ý": "y",
-}
+def Medituj():
+	while True:
+		UseSkill("Meditac")
+		(idx, text) = WaitForJournal(["Nedokázal ses", "klid a m"], 6000)
 
-def NormalizeString(string):
-	returnString = string
-	for fr, to in REMOVE_STRINGS.items():
-		returnString = returnString.replace(fr, to)
+		if idx == None:
+			break
 
-	return returnString.lower().strip()
+		if text is not None and text == "klid a m":
+			return
+
+	while Mana("self") < MaxMana("self"):
+		Pause(500)
+
+	Pause(1000)
 
 def GetGraphicsIdWithType(itemTypeName):
 	if itemTypeName in Graphics:
