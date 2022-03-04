@@ -88,7 +88,7 @@ def FindTypeBy(itemType, range=None, container=None, minAmount = None, returnAll
 	if isinstance(itemType, str):
 		itemType = GetType(itemType)
 		if itemType == 0:
-			print("Type " + itemType + " not exists")
+			print("Type " + str(itemType) + " does not exist")
 			return None
 
 		return FindTypeBy(itemType, range, container, minAmount)
@@ -266,9 +266,15 @@ def LoadRails(macro = None, rail = None, index = None):
 					rai = next((r for r in mac[1] if r[0] == rail), None)
 					if rai is not None:
 						if index is not None:
-							if index < len(rai[1]):
-								return rai[1][index]
-							return None
+							if type(index) == int:
+								if index < len(rai[1]):
+									return rai[1][index]
+								return None
+							else:
+								for pos in rai[1]:
+									if pos.note == index:
+										return pos
+								return None
 						return rai[1]
 				return mac[1]
 		return rails
@@ -301,6 +307,9 @@ def WalkTo(posX, posY, posZ, timeout=8000):
 	return True
 
 def PathfindToPos(pos, tolerance, maxTries, pause):
+	if pos is None:
+		return False
+
 	if isinstance(pos, list):
 		for onePos in pos:
 			PathfindToPos(onePos, tolerance, maxTries, pause)
@@ -449,3 +458,24 @@ def FindTypeList(list, range=None, loc=None, minamount=None, returnAllItems = Fa
 		raise NameError("MultiType " + list + " not found")
 
 	return False
+
+def SysMessageBlue(msg):
+	SysMessage(msg, 6)
+	
+def SysMessageBlue(msg):
+	SysMessage(msg, 14)
+	
+def SysMessagePink(msg):
+	SysMessage(msg, 26)
+	
+def SysMessageRed(msg):
+	SysMessage(msg, 38)
+	
+def SysMessageOrange(msg):
+	SysMessage(msg, 43)
+	
+def SysMessageYellow(msg):
+	SysMessage(msg, 53)
+	
+def SysMessageGreen(msg):
+	SysMessage(msg, 67)
