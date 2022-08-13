@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-#DorchLibrary
+#AndariaLibrary
 Version = "0.0.2"
 
-from DorchTypes import *
+from genericpath import isfile
+from AndariaTypes import *
 
 from Assistant import Engine
 from ClassicAssist.Data.Macros.Commands.AbilitiesCommands import *
@@ -46,7 +47,7 @@ from datetime import datetime, timedelta
 import time
 from collections import namedtuple
 
-CONFIG = "Data\Plugins\ClassicAssist\Modules\DorchLib.config"
+CONFIG = "Data\Plugins\ClassicAssist\Modules\AndariaLib.config"
 
 def GetType(itemTypeName):
 	if itemTypeName in Graphics:
@@ -179,6 +180,9 @@ def SaveConfig(config):
 		json.dump(config, config_file, indent=4, sort_keys=True, ensure_ascii=False)
 		
 def LoadConfig():
+	if os.path.isfile("Data\Plugins\ClassicAssist\Modules\DorchLib.config"):
+		os.rename("Data\Plugins\ClassicAssist\Modules\DorchLib.config", CONFIG)
+
 	if not os.path.isfile(CONFIG):
 		DefaultConfig()
 		
@@ -344,13 +348,13 @@ def StopAFK():
 	CloseGump(0x2fb1ee43)
 
 def CheckVersion():
-	url = "https://raw.githubusercontent.com/PoodyCZ/DorchLib/master/DorchLib.py"
+	url = "https://raw.githubusercontent.com/AndariaUO/AndariaLib/master/AndariaLib.py"
 	cl = WebClient()
 	dwnStr = cl.DownloadString(url)
 	todayString = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-	remindTomorrow = LoadMacroVariable("DorchLib", "RemindTomorrow", False)
+	remindTomorrow = LoadMacroVariable("AndariaLib", "RemindTomorrow", False)
 	if remindTomorrow:
-		lastVersionCheck = datetime.strptime(LoadMacroVariable("DorchLib", "LastVersionCheck", todayString), '%m/%d/%Y, %H:%M:%S')
+		lastVersionCheck = datetime.strptime(LoadMacroVariable("AndariaLib", "LastVersionCheck", todayString), '%m/%d/%Y, %H:%M:%S')
 		if lastVersionCheck > datetime.now() - timedelta(days=1):
 			return
 	for line in dwnStr.splitlines():
@@ -359,19 +363,19 @@ def CheckVersion():
 			for match in re.finditer("\d+(\.\d+)+", line):
 				if len(match.group(0)) > len(gitVersion):
 					gitVersion = match.group(0)
-			ignoreVersion = LoadMacroVariable("DorchLib", "IgnoreVersion", "0.0.0")
+			ignoreVersion = LoadMacroVariable("AndariaLib", "IgnoreVersion", "0.0.0")
 			if LooseVersion(ignoreVersion) == LooseVersion(gitVersion):
 				return
 			if LooseVersion(Version) < LooseVersion(gitVersion):
-				res, index = SelectionPrompt(['Otevřít stránku se stažením nové verze', 'Připomenout zítra', 'Tuto verzi nepřipomínat'], "Je dostupná nová verze DorchLib v{}!".format(gitVersion))
+				res, index = SelectionPrompt(['Otevřít stránku se stažením nové verze', 'Připomenout zítra', 'Tuto verzi nepřipomínat'], "Je dostupná nová verze AndariaLib v{}!".format(gitVersion))
 				if res:
 					if index == 0:
-						webbrowser.open("https://github.com/PoodyCZ/DorchLib", new=1)
+						webbrowser.open("https://github.com/AndariaUO/AndariaLib", new=1)
 					elif index == 1:
-						SaveMacroVariable("DorchLib", "RemindTomorrow", True)
-						SaveMacroVariable("DorchLib", "LastVersionCheck", todayString)
+						SaveMacroVariable("AndariaLib", "RemindTomorrow", True)
+						SaveMacroVariable("AndariaLib", "LastVersionCheck", todayString)
 					else:
-						SaveMacroVariable("DorchLib", "IgnoreVersion", gitVersion)
+						SaveMacroVariable("AndariaLib", "IgnoreVersion", gitVersion)
 			break
 
 __lastOpenedDoors = None
