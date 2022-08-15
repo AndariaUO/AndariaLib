@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #AndariaLibrary
-Version = "1.0.0"
+#Version = "1.0.1"
 
 from genericpath import isfile
 from AndariaTypes import *
