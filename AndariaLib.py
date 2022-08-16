@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #AndariaLibrary
-#Version = "1.0.1"
+Version = "1.0.2"
 
 from genericpath import isfile
 from AndariaTypes import *
@@ -50,6 +50,7 @@ from collections import namedtuple
 CONFIG = "Data\Plugins\ClassicAssist\Modules\AndariaLib.config"
 
 def GetType(itemTypeName):
+	itemTypeName = Deaccent(itemTypeName)
 	if itemTypeName in Graphics:
 		return Graphics[itemTypeName]
 	elif itemTypeName in Types:
@@ -358,7 +359,7 @@ def CheckVersion():
 		if lastVersionCheck > datetime.now() - timedelta(days=1):
 			return
 	for line in dwnStr.splitlines():
-		if line.startswith("#Version"):
+		if line.startswith("Version"):
 			gitVersion = ''
 			for match in re.finditer("\d+(\.\d+)+", line):
 				if len(match.group(0)) > len(gitVersion):
@@ -483,3 +484,55 @@ def SysMessageYellow(msg):
 	
 def SysMessageGreen(msg):
 	SysMessage(msg, 67)
+
+def Deaccent(text):
+	return ''.join(CharTrans(ch) for ch in text)
+
+def CharTrans(ch):
+	och = ord(ch)
+	if och == 193: return 'a'
+	elif och == 196: return 'a'
+	elif och == 200: return 'c'
+	elif och == 207: return 'd'
+	elif och == 201: return 'e'
+	elif och == 204: return 'e'
+	elif och == 205: return 'i'
+	elif och == 197: return 'l'
+	elif och == 188: return 'l'
+	elif och == 210: return 'n'
+	elif och == 211: return 'o'
+	elif och == 212: return 'o'
+	elif och == 214: return 'o'
+	elif och == 192: return 'r'
+	elif och == 216: return 'r'
+	elif och == 138: return 's'
+	elif och == 141: return 't'
+	elif och == 218: return 'u'
+	elif och == 217: return 'u'
+	elif och == 220: return 'u'
+	elif och == 221: return 'y'
+	elif och == 142: return 'z'
+	elif och == 225: return 'a'
+	elif och == 228: return 'a'
+	elif och == 232: return 'c'
+	elif och == 239: return 'd'
+	elif och == 233: return 'e'
+	elif och == 236: return 'e'
+	elif och == 237: return 'i'
+	elif och == 229: return 'i'
+	elif och == 190: return 'i'
+	elif och == 242: return 'n'
+	elif och == 243: return 'o'
+	elif och == 244: return 'o'
+	elif och == 246: return 'o'
+	elif och == 224: return 'r'
+	elif och == 248: return 'r'
+	elif och == 154: return 's'
+	elif och == 157: return 't'
+	elif och == 250: return 'u'
+	elif och == 249: return 'u'
+	elif och == 252: return 'u'
+	elif och == 253: return 'y'
+	elif och == 158: return 'z'
+	else:
+		return ch

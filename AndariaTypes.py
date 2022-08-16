@@ -223,6 +223,7 @@ Graphics = {
 	"nadoba2": 6871,
 	"hlina": 12793,
 	"lopata": 3897,
+	"krumpac": 0xe85,
 	"zoranaHlina": 12788,
 	"rostlinkaZasazenaZensen": 6377,
 	"rostlinkaZasazenaMandragora": 6367,
