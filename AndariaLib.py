@@ -86,6 +86,17 @@ def GetGraphicsIdWithType(itemTypeName):
 
 	return 0
 
+def GetTypeName(item):
+	for key in Types:
+		if Types[key].match(item):
+			return key
+	
+	for key in Graphics:
+		if Graphic(item) == Graphics[key]:
+			return key
+
+	return None
+
 def FindTypeBy(itemType, range=None, container=None, minAmount = None, returnAllItems = False):
 	if isinstance(itemType, str):
 		itemType = GetType(itemType)
@@ -98,7 +109,6 @@ def FindTypeBy(itemType, range=None, container=None, minAmount = None, returnAll
 	isObjectType = False
 	if isinstance(itemType, ItemTypeClass):
 		isObjectType = True
-
 
 	items = []
 	if container is not None:
@@ -156,20 +166,24 @@ def FindTypeBy(itemType, range=None, container=None, minAmount = None, returnAll
 #	   %4 CISLO kolik, bere i klíčová slova All/Weight, tedy Vše nebo Podle Váhy
 #	   %5 CISLO barva
 def PresunItem(type, src, tar, amount = 1, color = -1):
-	if CountType(type, src) <= 0:
+	if CountType(type, src, color) <= 0:
 		return False
 	
 	FindType(type, -1, src, color)
 	MoveItem("found", tar, amount)
 	return True
 	
-def LoadAlias(alias, n, max):
+def LoadAlias(alias, n = None, max = None):
 	if GetAlias(alias) == 0:
-		PromptAlias(alias)
+		PromptMacroAlias(alias)
 	else:
 		HeadMsg(alias, alias)
-		if not ConfirmPrompt("Nastavení proměnných " + str(n) + "/" + str(max) + ":\nPoužít tento cíl jako '" + alias + "'?"):
-			PromptAlias(alias)
+		if n is not None and max is not None:
+			prompt = "Nastavení proměnných " + str(n) + "/" + str(max) + ":\nPoužít tento cíl jako '" + alias + "'?"
+		else:
+			prompt = "Nastavení proměnných:\nPoužít tento cíl jako '" + alias + "'?"
+		if not ConfirmPrompt(prompt):
+			PromptMacroAlias(alias)
 
 def CheckDistance(alias, d):
 	if Distance(alias) > d:
@@ -198,6 +212,16 @@ def SaveMacroVariable(macro, variable, value):
 	if macro not in config["macros"]:
 		config["macros"][macro] = {}
 	config["macros"][macro][variable] = value
+		
+	SaveConfig(config)
+
+def PromptMacroVariable(macro, variable, prompt):
+	config = LoadConfig()
+	value = PromptAlias(prompt)
+	if macro not in config["macros"]:
+		config["macros"][macro] = {}
+	config["macros"][macro][variable] = value
+	UnsetAlias(prompt)
 		
 	SaveConfig(config)
 	
@@ -329,7 +353,6 @@ def PathfindToPos(pos, tolerance, maxTries, pause):
 		tries = 0
 		while Distance(pos.x, pos.y, Engine.Player.X, Engine.Player.Y) > tolerance:
 			if not Pathfinding():
-				print("{} - {}".format(tries, Pathfinding()))
 				if tries > maxTries:
 					return False
 				tries += 1
@@ -467,7 +490,7 @@ def FindTypeList(list, range=None, loc=None, minamount=None, returnAllItems = Fa
 def SysMessageBlue(msg):
 	SysMessage(msg, 6)
 	
-def SysMessageBlue(msg):
+def SysMessageViolet(msg):
 	SysMessage(msg, 14)
 	
 def SysMessagePink(msg):

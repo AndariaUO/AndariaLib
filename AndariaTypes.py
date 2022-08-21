@@ -95,7 +95,7 @@ class ItemTypeClass:
 
 Graphics = {
 	"log": 7133,
-	"stahovaciNuz": 3780,
+	"stahovaciNuz": 0xec5,
 	"kos": 3703,
 	"kladivkoKovarske": 5091,
 	"dyka": 3921,
@@ -115,9 +115,9 @@ Graphics = {
 	"prize": 3613,
 	"rudy": 6585,
 	"seno": 0xf36,
-	"mining1": 6583,
-	"mining2": 6584,
-	"mining3": 6586,
+	"mining1": 0x19b7,
+	"mining2": 0x19b8,
+	"mining3": 0x19b9,
 	"driky": 7124,
 	"prkna": 7127,
 	"vrhacky": 15455,
@@ -293,6 +293,10 @@ Graphics = {
 	"origamiMotyl2": 0x2839,
 	"pivo": 0x99f,
 	"lahevVino": 0x9c7,
+
+	#NPCS
+	"mrtvola": 0x2006,
+	"sliz": 0x33,
 }
 
 colorTmavo = 1109
@@ -456,6 +460,7 @@ MultiTypes = {
 	"rudy": [
 		ItemTypeClass([6585, 6584, 6586, 3978, 6583], ["ruda", "rudy"])
 	],
+	"dolovane": [ Graphics["mining1"], Graphics["mining2"], Graphics["mining3"], Graphics["sirnyPrach"], Graphics["suroveZelezo"], Graphics["obsidian"] ],
 	"zakladRegy": [
 		Graphics["mandragora"], Graphics["krvavyMech"], Graphics["sirnyPrach"], Graphics["perly"], Graphics["pavuciny"],
 		Graphics["rulik"], Graphics["cesneky"], Graphics["krvaveJikry"], Graphics["urodnePrsti"], Graphics["zensen"],
@@ -481,5 +486,11 @@ MultiTypes = {
 		# --Types["lektvarVybusny"], Types["lektvarVybusnyVelky"], Types["lektvarOsvezeni"],
 		Types["lektvarLecivy"], Types["lektvarLecivyVelky"], Types["lektvarJed"],
 		# --Types["lektvarJedVelky"], Types["lektvarSkrytiPovesti"],
+	],
+	"kostiSber": [
+		0x1b0e,0x1b0a,0x1b1a,0x1b19
+	],
+	"AndorStokyNPCs": [
+		0x33, 0xd7, 0x2a
 	]
 }
