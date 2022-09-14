@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #AndariaLibrary
-Version = "1.0.2"
+Version = "1.0.3"
 
 from genericpath import isfile
 from AndariaTypes import *
@@ -46,6 +46,7 @@ import webbrowser
 from datetime import datetime, timedelta
 import time
 from collections import namedtuple
+import unicodedata
 
 CONFIG = "Data\Plugins\ClassicAssist\Modules\AndariaLib.config"
 
@@ -215,6 +216,20 @@ def SaveMacroVariable(macro, variable, value):
 		
 	SaveConfig(config)
 
+def DeleteMacroVariable(macro, variable):
+	config = LoadConfig()
+	if macro in config["macros"] and variable in config["macros"][macro]:
+		del config["macros"][macro][variable]
+		
+	SaveConfig(config)
+
+def DeleteMacroVariables(macro):
+	config = LoadConfig()
+	if macro in config["macros"]:
+		del config["macros"][macro]
+		
+	SaveConfig(config)
+
 def PromptMacroVariable(macro, variable, prompt):
 	config = LoadConfig()
 	value = PromptAlias(prompt)
@@ -362,9 +377,6 @@ def PathfindToPos(pos, tolerance, maxTries, pause):
 	else:			
 		return WalkTo(pos.x, pos.y, pos.z)
 
-def Distance(x1, y1, x2, y2):
-	return math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2))
-
 def RunAFK():
 	PlayMacro("AFK Gump")
 
@@ -507,6 +519,11 @@ def SysMessageYellow(msg):
 	
 def SysMessageGreen(msg):
 	SysMessage(msg, 67)
+    
+def AddCooldown(name, time):
+    SaveMacroVariable("Cooldown", name, time)
+    if not IsRunning("Cooldown"):
+        PlayMacro("Cooldown")
 
 def Deaccent(text):
 	return ''.join(CharTrans(ch) for ch in text)

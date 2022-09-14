@@ -95,7 +95,6 @@ class ItemTypeClass:
 
 Graphics = {
 	"log": 7133,
-	"stahovaciNuz": 0xec5,
 	"kos": 3703,
 	"kladivkoKovarske": 5091,
 	"dyka": 3921,
@@ -118,6 +117,7 @@ Graphics = {
 	"mining1": 0x19b7,
 	"mining2": 0x19b8,
 	"mining3": 0x19b9,
+	"polena": 0x1bdd,
 	"driky": 7124,
 	"prkna": 7127,
 	"vrhacky": 15455,
@@ -293,6 +293,8 @@ Graphics = {
 	"origamiMotyl2": 0x2839,
 	"pivo": 0x99f,
 	"lahevVino": 0x9c7,
+	"kusMasa": 0x9f1,
+	"peceneMaso": 0x9f2,
 
 	#NPCS
 	"mrtvola": 0x2006,
@@ -492,5 +494,8 @@ MultiTypes = {
 	],
 	"AndorStokyNPCs": [
 		0x33, 0xd7, 0x2a
+	],
+	"stahovaciNuz": [
+		0xec4, 0xec5
 	]
 }
