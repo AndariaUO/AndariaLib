@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 #AndariaLibrary
-Version = "1.0.3"
+Version = "1.0.4"
 
-from genericpath import isfile
 from AndariaTypes import *
 
 from Assistant import Engine
@@ -38,7 +37,6 @@ from ClassicAssist.UO.Data import Direction
 import os
 import json
 import codecs
-import math
 from System.Net import WebClient
 from distutils.version import LooseVersion
 import re
@@ -46,7 +44,6 @@ import webbrowser
 from datetime import datetime, timedelta
 import time
 from collections import namedtuple
-import unicodedata
 
 CONFIG = "Data\Plugins\ClassicAssist\Modules\AndariaLib.config"
 
