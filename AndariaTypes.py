@@ -149,6 +149,7 @@ Graphics = {
 	"gemsCitrin": 3861,
 	"gemsSafir": 3857,
 	"gemsAmetyst": 3886,
+	"gemsPerla": 0xf1e,
 	"gems": 3870,
 	"mapaKPokladu": 5355,
 	"gems3": 3855,
@@ -179,7 +180,7 @@ Graphics = {
 	"chmelSeed": 3818,
 	"mandragora": 3974,
 	"krvavyMech": 3963,
-	"perly": 3962,
+	"cerneperly": 3962,
 	"zensen": 3973,
 	"pavuciny": 3981,
 	"rulik": 3976,
@@ -296,6 +297,21 @@ Graphics = {
 	"kusMasa": 0x9f1,
 	"peceneMaso": 0x9f2,
 
+	"rybarskyPrut": 0xdc0,
+	"rybiStejk": 0x97a,
+	"ryba1": 0x9cc,
+	"ryba2": 0x9cd,
+	"ryba3": 0x9ce,
+	"ryba4": 0x9cf,
+	"uhor": 0x379f,
+	"perletoveryby": 0xdd5,
+	"lviryby": 0xdd6,
+	"letajiciryby": 0xdd7,
+	"chobotnicka": 0x1b9b,
+	"vodnisnek": 0xfc7,
+	"vodnirasy": 0x9cc,
+	"spinavaLahev": 0xe2b,
+	
 	#NPCS
 	"mrtvola": 0x2006,
 	"sliz": 0x33,
@@ -413,6 +429,14 @@ Types = {
 	"hnedePivo": ItemTypeClass(Graphics["pivo"], "Hnede"),
 	"jantarovePivo": ItemTypeClass(Graphics["pivo"], "Jantarov"),
 	"vino": ItemTypeClass(Graphics["lahevVino"], "vin"),
+	"jeseter": ItemTypeClass(Graphics["ryba1"], "jeseter"),
+	"sumec": ItemTypeClass(Graphics["ryba1"], "sumec"),
+	"kapr": ItemTypeClass(Graphics["ryba1"], "kapr"),
+	"zlataryba": ItemTypeClass(Graphics["ryba1"], "zlatá ryba"),
+	"stika": ItemTypeClass(Graphics["ryba1"], "tika"),
+	"okoun": ItemTypeClass(Graphics["ryba2"], "okoun"),
+	"lin": ItemTypeClass(Graphics["ryba3"], "lín"),
+	"candat": ItemTypeClass(Graphics["ryba2"], "candát"),
 }
 
 MultiTypes = {
@@ -464,7 +488,7 @@ MultiTypes = {
 	],
 	"dolovane": [ Graphics["mining1"], Graphics["mining2"], Graphics["mining3"], Graphics["sirnyPrach"], Graphics["suroveZelezo"], Graphics["obsidian"] ],
 	"zakladRegy": [
-		Graphics["mandragora"], Graphics["krvavyMech"], Graphics["sirnyPrach"], Graphics["perly"], Graphics["pavuciny"],
+		Graphics["mandragora"], Graphics["krvavyMech"], Graphics["sirnyPrach"], Graphics["cerneperly"], Graphics["pavuciny"],
 		Graphics["rulik"], Graphics["cesneky"], Graphics["krvaveJikry"], Graphics["urodnePrsti"], Graphics["zensen"],
 	],
 	"esence": [
@@ -497,5 +521,14 @@ MultiTypes = {
 	],
 	"stahovaciNuz": [
 		0xec4, 0xec5
+	],
+	"rybolovCennosti": [
+		Types["jeseter"], Graphics["cerneperly"], Types["zlataryba"], Graphics["spinavaLahev"], Graphics["gemsPerla"]
+	],
+	"rybolovKuch": [
+		Graphics["krvaveJikry"], Graphics["rybiStejk"]
+	],
+	"ryby": [
+		Types["jeseter"], Types["sumec"], Types["kapr"], Types["zlataryba"], Types["stika"], Types["okoun"], Types["lin"], Types["candat"], Graphics["lviryby"], Graphics["letajiciryby"], Graphics["perletoveryby"]
 	]
 }

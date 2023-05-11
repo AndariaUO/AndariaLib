@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #AndariaLibrary
-Version = "1.0.4"
+Version = "1.0.5"
 
 from AndariaTypes import *
 
@@ -210,7 +210,7 @@ def SaveMacroVariable(macro, variable, value):
 	if macro not in config["macros"]:
 		config["macros"][macro] = {}
 	config["macros"][macro][variable] = value
-		
+			
 	SaveConfig(config)
 
 def DeleteMacroVariable(macro, variable):
@@ -321,6 +321,20 @@ def LoadRails(macro = None, rail = None, index = None):
 		return rails
 	return []
 
+def FindClosestRail(macro, rails):
+    minDist = 1000
+    ind = 0
+    for index in range(0, 1000):
+        rail = LoadRails(macro, rails, index)
+        if rail is not None:
+            d = Distance(rail.x, rail.y)
+            if d <= minDist:
+                minDist = d
+                ind = index
+        else:
+            return ind
+    return ind
+
 def PathfindToRail(macro, rail, index, tolerance = -1, maxTries = 30, pause = 1000):
 	return PathfindToPos(LoadRails(macro, rail, index), tolerance, maxTries, pause)
 
@@ -363,7 +377,7 @@ def PathfindToPos(pos, tolerance, maxTries, pause):
 
 	if tolerance > 0:
 		tries = 0
-		while Distance(pos.x, pos.y, Engine.Player.X, Engine.Player.Y) > tolerance:
+		while Distance(pos.x, pos.y) > tolerance:
 			if not Pathfinding():
 				if tries > maxTries:
 					return False
