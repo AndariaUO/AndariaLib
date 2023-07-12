@@ -600,16 +600,15 @@ def WaitForSave():
 		ClearJournal()
 
 def FormatGold(value):
-    copper = value % 10
-    value -= copper
-    silver = value % 100
-    value -= silver
     gold = value / 100
+    left = value - 100 * gold
+    silver = left / 10
+    copper = left % 10
     str = ""
     if gold > 0:
         str += "{0}zl ".format(gold)
     if silver > 0:
-        str += "{0}st ".format(gold)
+        str += "{0}st ".format(silver)
     if copper > 0:
         str += "{0}md".format(copper)
     return str
