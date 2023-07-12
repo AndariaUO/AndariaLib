@@ -1,20 +1,59 @@
 # -*- coding: utf-8 -*-
 
-import unicodedata
-REMOVE_STRINGS = {
-	"š": "s",
-	"é": "e",
-	"": "s",
-	"í": "i",
-	"ý": "y",
-}
+def Deaccent2(text):
+	return ''.join(CharTrans2(ch) for ch in text)
+
+def CharTrans2(ch):
+	och = ord(ch)
+	if och == 193: return 'a'
+	elif och == 196: return 'a'
+	elif och == 200: return 'c'
+	elif och == 207: return 'd'
+	elif och == 201: return 'e'
+	elif och == 204: return 'e'
+	elif och == 205: return 'i'
+	elif och == 197: return 'l'
+	elif och == 188: return 'l'
+	elif och == 210: return 'n'
+	elif och == 211: return 'o'
+	elif och == 212: return 'o'
+	elif och == 214: return 'o'
+	elif och == 192: return 'r'
+	elif och == 216: return 'r'
+	elif och == 138: return 's'
+	elif och == 141: return 't'
+	elif och == 218: return 'u'
+	elif och == 217: return 'u'
+	elif och == 220: return 'u'
+	elif och == 221: return 'y'
+	elif och == 142: return 'z'
+	elif och == 225: return 'a'
+	elif och == 228: return 'a'
+	elif och == 232: return 'c'
+	elif och == 239: return 'd'
+	elif och == 233: return 'e'
+	elif och == 236: return 'e'
+	elif och == 237: return 'i'
+	elif och == 229: return 'i'
+	elif och == 190: return 'i'
+	elif och == 242: return 'n'
+	elif och == 243: return 'o'
+	elif och == 244: return 'o'
+	elif och == 246: return 'o'
+	elif och == 224: return 'r'
+	elif och == 248: return 'r'
+	elif och == 154: return 's'
+	elif och == 157: return 't'
+	elif och == 250: return 'u'
+	elif och == 249: return 'u'
+	elif och == 252: return 'u'
+	elif och == 253: return 'y'
+	elif och == 158: return 'z'
+	else:
+		return ch
 
 def NormalizeString(string):
-	returnString = string
-	for fr, to in REMOVE_STRINGS.items():
-		returnString = returnString.replace(fr, to)
-
-	return returnString.lower().strip()
+	return Deaccent2(string).lower().strip()
 
 class ItemTypeClass:
 
@@ -76,21 +115,21 @@ class ItemTypeClass:
 		itemName = NormalizeString(itemName)
 		if isinstance(self.names, list):
 			for name in self.names:
-				if itemName.find(name) != -1:
+				if name in itemName:
 					return True
 		else:
-			return itemName.find(self.names) != -1
+			return self.names in itemName
 
 	def notMatchName(self, itemName):
 		itemName = NormalizeString(itemName)
 		if isinstance(self.notNames, list):
 			for name in self.notNames:
-				if itemName.find(name) != -1:
+				if name in itemName:
 					return False
 
 			return True
 		else:
-			return itemName.find(self.notNames) == -1
+			return self.names not in itemName
 
 
 Graphics = {
@@ -314,6 +353,13 @@ Graphics = {
 	"svitekZmenseni": 0xe36,
 	"zmensenyMedved": 0x211e,
 	"umyvadlo": 0x1008,
+	"paprika": 0x3b42,
+	"vceliUl": 0x91a,
+	"kureciStehynko": 0x1608,
+	"mozek": 0x1cf0,
+	"lebka": 0x1ae0,
+	"misaHrachu": 0x1601,
+	"prilbaZKosti": 0x1456,
 	
 	#NPCS
 	"mrtvola": 0x2006,
@@ -339,7 +385,6 @@ Types = {
 	"prutyTmavy": ItemTypeClass(Graphics["prutyZelezo"], None, colorTmavo),
 	"prutyMitril": ItemTypeClass(Graphics["prutyZelezo"], None, colorMitril),
 	"prutyOcel": ItemTypeClass(Graphics["prutyZelezo"], None, colorOcel),
-	"navodRobyOchrany": ItemTypeClass(Graphics["svitek"], "Roby Ochrany"),
 	"obycNit": ItemTypeClass(Graphics["nit"], None, 0),
 	"reznaNit": ItemTypeClass(Graphics["nit"], "rezn"),
 	"tmavaNit": ItemTypeClass(Graphics["nit"], "tmava"),
@@ -414,7 +459,8 @@ Types = {
 	"esenceOhne": ItemTypeClass(Graphics["esence"], "Ohn", 2994),
 	"esenceVzduchu": ItemTypeClass(Graphics["esence"], "Vzduch", 21),
 	"lektvarZmenseni": ItemTypeClass(Graphics["zmensovak"], None, 904),
-	"navody": ItemTypeClass(Graphics["svitek"], "Navod"),
+	"navodZlaty": ItemTypeClass(Graphics["svitek"], "Návod", 1944),
+	"navodBily": ItemTypeClass(Graphics["svitek"], "Návod", 2064),
 	"kokosovyOrech": ItemTypeClass(Graphics["kokosoveOrechy"], "Kokosov"),
 	"magickaKnihaChaosu": ItemTypeClass(Graphics["knihaChaosu"], "Chaosu"),
 	"magickaKnihaMaterie": ItemTypeClass(Graphics["knihaMaterie"], "Materie"),
@@ -435,6 +481,39 @@ Types = {
 	"mapalvl4": ItemTypeClass(Graphics["mapaKPokladu"], "Rozl", 41),
 	"mapalvl5": ItemTypeClass(Graphics["mapaKPokladu"], "Rozl", 1915),
 
+	#trofeje
+	"trophy_zmije": ItemTypeClass(Graphics["paprika"], "Zmiji zub", 871),
+	"trophy_kobra": ItemTypeClass(Graphics["paprika"], "Kobri zub", 770),
+	"trophy_mamba": ItemTypeClass(Graphics["paprika"], "Zub mamby", 2765),
+	"trophy_anakonda": ItemTypeClass(Graphics["paprika"], "Zub anakondy", 2715),
+	"trophy_obri_pavouk": ItemTypeClass(Graphics["kokosoveOrechy"], "Zamotek obriho pavouka", 1153),
+	"trophy_desivy_pavouk": ItemTypeClass(Graphics["kokosoveOrechy"], "Zamotek desiveho pavouka", 2830),
+	"trophy_sklipkan": ItemTypeClass(Graphics["kokosoveOrechy"], "Sklipkani zamotek", 1664),
+	"trophy_upiriho_pavouka": ItemTypeClass(Graphics["kokosoveOrechy"], "Zamotek upiriho pavouka", 2246),
+	"trophy_vtackar": ItemTypeClass(Graphics["kokosoveOrechy"], "Zamotek vtackare", 2056),
+	"trophy_snovac": ItemTypeClass(Graphics["kokosoveOrechy"], "Zamotek snovace", 2921),
+	"trophy_cerna_vdova": ItemTypeClass(Graphics["kokosoveOrechy"], "Zamotek cerne vdovy", 2831),
+	"trophy_tarantule": ItemTypeClass(Graphics["kokosoveOrechy"], "Tarantuli zamotek", 2240),
+	"trophy_vrrk": ItemTypeClass(Graphics["kureciStehynko"], "Vrrci tlapka", 2241),
+	"trophy_skret": ItemTypeClass(Graphics["paprika"], "Skreti tesaky", 1446),
+	"trophy_aligator": ItemTypeClass(Graphics["paprika"], "Krokodyli zub", 2241),
+	"trophy_jesterak": ItemTypeClass(Graphics["paprika"], "Bodec z jesteriho muze", 2832),
+	"trophy_gorila": ItemTypeClass(Graphics["mozek"], "Gorili mozek", 2718),
+	"trophy_mephitis": ItemTypeClass(Graphics["vceliUl"], "Zamotek Mephitise", 2240),
+	"trophy_katakan": ItemTypeClass(Graphics["lebka"], "Upiri lebka", 0),
+	"trophy_parasekt": ItemTypeClass(0xe25, "Krev hadiho maga", 0),
+	"trophy_zabi_matka": ItemTypeClass(Graphics["misaHrachu"], "Zabi jed", 0),
+	"trophy_druid": ItemTypeClass(0x2559, "Medvedi kost", 0),
+	"trophy_dabel": ItemTypeClass(Graphics["prilbaZKosti"], "Dablova lebka", 2058),
+	"trophy_strazny_golem": ItemTypeClass(0x1023, "Soucastky strazneho golema", 980),
+	"trophy_golem_strazce": ItemTypeClass(0x1023, "Soucastky golema strazce", 980),
+	"trophy_kuresekt": ItemTypeClass(0xf54, "Ohnive vejce", 0),
+	"trophy_kurekral": ItemTypeClass(0xf54, "Zlata pirka a vejice", 0),
+	"trophy_minotaur": ItemTypeClass(0x2c7f, "Roh minotaura", 0),
+	"trophy_vudce_lidozroutu": ItemTypeClass(0x1b1b, "Pater lidozrouta", 0),
+	"trophy_pavouci_kral": ItemTypeClass(0x1504, "Nohy pavouka", 0),
+	"trophy_pavouci_kralovna": ItemTypeClass(Graphics["esence"], "Krev kralovny", 0),
+
 	#svitky magie pouze podle typu
 	#"svitekChaos": ItemTypeClass(Graphics["svitek"], None, 2878),
 	#"svitekPriroda": ItemTypeClass(Graphics["svitek"], None, 1368),
@@ -446,195 +525,195 @@ Types = {
 
 	#svitky magie
     "svitekMateriePast": ItemTypeClass(Graphics["svitek"], "Past", 2805),
-    "svitekMaterieOdstranpast": ItemTypeClass(Graphics["svitek"], "Odstraň past", 2805),
+    "svitekMaterieOdstranpast": ItemTypeClass(Graphics["svitek"], "Odstran past", 2805),
     "svitekMaterieOdolnostnamagii": ItemTypeClass(Graphics["svitek"], "Odolnost na magii", 2805),
-    "svitekMaterieMagickyzamek": ItemTypeClass(Graphics["svitek"], "Magicky zámek", 2805),
-    "svitekMaterieOdemceni": ItemTypeClass(Graphics["svitek"], "Odemčení", 2805),
-    "svitekMaterieMagickysip": ItemTypeClass(Graphics["svitek"], "Magicky šíp", 2805),
-    "svitekMaterieLedovasmrst": ItemTypeClass(Graphics["svitek"], "Ledová smršť", 2805),
-    "svitekMaterieKamennazed": ItemTypeClass(Graphics["svitek"], "Kamenná zeď", 2805),
-    "svitekMaterieVymena": ItemTypeClass(Graphics["svitek"], "Vyměna", 2805),
-    "svitekMaterieRunovateleportace": ItemTypeClass(Graphics["svitek"], "Runová teleportace", 2805),
-    "svitekMaterieOznaceniruny": ItemTypeClass(Graphics["svitek"], "Označení runy", 2805),
-    "svitekMaterieMagickyportal": ItemTypeClass(Graphics["svitek"], "Magicky portál", 2805),
-    "svitekMaterieHromadnateleportace": ItemTypeClass(Graphics["svitek"], "Hromadná teleportace", 2805),
+    "svitekMaterieMagickyzamek": ItemTypeClass(Graphics["svitek"], "Magicky zamek", 2805),
+    "svitekMaterieOdemceni": ItemTypeClass(Graphics["svitek"], "Odemceni", 2805),
+    "svitekMaterieMagickysip": ItemTypeClass(Graphics["svitek"], "Magicky sip", 2805),
+    "svitekMaterieLedovasmrst": ItemTypeClass(Graphics["svitek"], "Ledova smrst", 2805),
+    "svitekMaterieKamennazed": ItemTypeClass(Graphics["svitek"], "Kamenna zed", 2805),
+    "svitekMaterieVymena": ItemTypeClass(Graphics["svitek"], "Vymena", 2805),
+    "svitekMaterieRunovateleportace": ItemTypeClass(Graphics["svitek"], "Runova teleportace", 2805),
+    "svitekMaterieOznaceniruny": ItemTypeClass(Graphics["svitek"], "Oznaceni runy", 2805),
+    "svitekMaterieMagickyportal": ItemTypeClass(Graphics["svitek"], "Magicky portal", 2805),
+    "svitekMaterieHromadnateleportace": ItemTypeClass(Graphics["svitek"], "Hromadna teleportace", 2805),
     "svitekMaterieNeviditelnost": ItemTypeClass(Graphics["svitek"], "Neviditelnost", 2805),
-    "svitekMaterieHromadnaneviditelnost": ItemTypeClass(Graphics["svitek"], "Hromadná neviditelnost", 2805),
-    "svitekMaterieOdhalenineviditelneho": ItemTypeClass(Graphics["svitek"], "Odhalení neviditelného", 2805),
+    "svitekMaterieHromadnaneviditelnost": ItemTypeClass(Graphics["svitek"], "Hromadna neviditelnost", 2805),
+    "svitekMaterieOdhalenineviditelneho": ItemTypeClass(Graphics["svitek"], "Odhaleni neviditelneho", 2805),
     "svitekMaterieKamennygolem": ItemTypeClass(Graphics["svitek"], "Kamenny golem", 2805),
-    "svitekMaterieVodnigolem": ItemTypeClass(Graphics["svitek"], "Vodní golem", 2805),
-    "svitekMaterieLavovygolem": ItemTypeClass(Graphics["svitek"], "Lávovy golem", 2805),
+    "svitekMaterieVodnigolem": ItemTypeClass(Graphics["svitek"], "Vodni golem", 2805),
+    "svitekMaterieLavovygolem": ItemTypeClass(Graphics["svitek"], "Lavovy golem", 2805),
     "svitekMaterieLedovygolem": ItemTypeClass(Graphics["svitek"], "Ledovy golem", 2805),
     "svitekMaterieKovovygolem": ItemTypeClass(Graphics["svitek"], "Kovovy golem", 2805),
-    "svitekMaterieMagickacepel": ItemTypeClass(Graphics["svitek"], "Magická čepel", 2805),
-    "svitekMaterieBludiste": ItemTypeClass(Graphics["svitek"], "Bludiště", 2805),
-    "svitekMaterieVytvorzbran": ItemTypeClass(Graphics["svitek"], "Vytvoř zbraň", 2805),
-    "svitekMaterieVytvorzbroj": ItemTypeClass(Graphics["svitek"], "Vytvoř zbroj", 2805),
-    "svitekMaterieZrusmagii": ItemTypeClass(Graphics["svitek"], "Zruš magii", 2805),
-    "svitekMateriePlosnezrusenimagie": ItemTypeClass(Graphics["svitek"], "Plošné zrušení magie", 2805),
-    "svitekMaterieMagickykamen": ItemTypeClass(Graphics["svitek"], "Magicky kámen", 2805),
+    "svitekMaterieMagickacepel": ItemTypeClass(Graphics["svitek"], "Magicka cepel", 2805),
+    "svitekMaterieBludiste": ItemTypeClass(Graphics["svitek"], "Bludiste", 2805),
+    "svitekMaterieVytvorzbran": ItemTypeClass(Graphics["svitek"], "Vytvor zbran", 2805),
+    "svitekMaterieVytvorzbroj": ItemTypeClass(Graphics["svitek"], "Vytvor zbroj", 2805),
+    "svitekMaterieZrusmagii": ItemTypeClass(Graphics["svitek"], "Zrus magii", 2805),
+    "svitekMateriePlosnezrusenimagie": ItemTypeClass(Graphics["svitek"], "Plosne zruseni magie", 2805),
+    "svitekMaterieMagickykamen": ItemTypeClass(Graphics["svitek"], "Magicky kamen", 2805),
     "svitekMaterieHromovygolem": ItemTypeClass(Graphics["svitek"], "Hromovy golem", 2805),
-    "svitekMaterieKresadlo": ItemTypeClass(Graphics["svitek"], "Křesadlo", 2805),
+    "svitekMaterieKresadlo": ItemTypeClass(Graphics["svitek"], "Kresadlo", 2805),
     "svitekMaterieKoroze": ItemTypeClass(Graphics["svitek"], "Koroze", 2805),
-    "svitekMateriePromenavevirmagie": ItemTypeClass(Graphics["svitek"], "Proměna ve vír magie", 2805),
-    "svitekZivotLehkeleceni": ItemTypeClass(Graphics["svitek"], "Lehké léčení", 2705),
-    "svitekZivotSilneleceni": ItemTypeClass(Graphics["svitek"], "Silné léčení", 2705),
-    "svitekZivotPlosneleceni": ItemTypeClass(Graphics["svitek"], "Plošné léčení", 2705),
-    "svitekZivotZmrtvychvstani": ItemTypeClass(Graphics["svitek"], "Zmrtvychvstání", 2705),
-    "svitekZivotOchranavuciohni": ItemTypeClass(Graphics["svitek"], "Ochrana vůči ohni", 2705),
-    "svitekZivotOchranavucienergii": ItemTypeClass(Graphics["svitek"], "Ochrana vůči energii", 2705),
-    "svitekZivotOchranavucikyseline": ItemTypeClass(Graphics["svitek"], "Ochrana vůči kyselině", 2705),
-    "svitekZivotOchranavucimrazu": ItemTypeClass(Graphics["svitek"], "Ochrana vůči mrazu", 2705),
-    "svitekZivotOchranavucizlu": ItemTypeClass(Graphics["svitek"], "Ochrana vůči zlu", 2705),
-    "svitekZivotOchranavucielementum": ItemTypeClass(Graphics["svitek"], "Ochrana vůči elementům", 2705),
+    "svitekMateriePromenavevirmagie": ItemTypeClass(Graphics["svitek"], "Promena ve vir magie", 2805),
+    "svitekZivotLehkeleceni": ItemTypeClass(Graphics["svitek"], "Lehke leceni", 2705),
+    "svitekZivotSilneleceni": ItemTypeClass(Graphics["svitek"], "Silne leceni", 2705),
+    "svitekZivotPlosneleceni": ItemTypeClass(Graphics["svitek"], "Plosne leceni", 2705),
+    "svitekZivotZmrtvychvstani": ItemTypeClass(Graphics["svitek"], "Zmrtvychvstani", 2705),
+    "svitekZivotOchranavuciohni": ItemTypeClass(Graphics["svitek"], "Ochrana vuci ohni", 2705),
+    "svitekZivotOchranavucienergii": ItemTypeClass(Graphics["svitek"], "Ochrana vuci energii", 2705),
+    "svitekZivotOchranavucikyseline": ItemTypeClass(Graphics["svitek"], "Ochrana vuci kyseline", 2705),
+    "svitekZivotOchranavucimrazu": ItemTypeClass(Graphics["svitek"], "Ochrana vuci mrazu", 2705),
+    "svitekZivotOchranavucizlu": ItemTypeClass(Graphics["svitek"], "Ochrana vuci zlu", 2705),
+    "svitekZivotOchranavucielementum": ItemTypeClass(Graphics["svitek"], "Ochrana vuci elementum", 2705),
     "svitekZivotRegenerace": ItemTypeClass(Graphics["svitek"], "Regenerace", 2705),
     "svitekZivotNesmrtelnost": ItemTypeClass(Graphics["svitek"], "Nesmrtelnost", 2705),
-    "svitekZivotModlitba": ItemTypeClass(Graphics["svitek"], "Modlitba", 2705),
-    "svitekZivotSvatesvetlo": ItemTypeClass(Graphics["svitek"], "Svaté světlo", 2705),
+    "svitekZivotModlitba": ItemTypeClass(Graphics["svitek"], "Modlitba", 2705, "Plosna"),
+    "svitekZivotSvatesvetlo": ItemTypeClass(Graphics["svitek"], "Svate svetlo", 2705),
     "svitekZivotObnova": ItemTypeClass(Graphics["svitek"], "Obnova", 2705),
-    "svitekZivotPozehnejbytosti": ItemTypeClass(Graphics["svitek"], "Požehnej bytosti", 2705),
-    "svitekZivotPozehnejzbroj": ItemTypeClass(Graphics["svitek"], "Požehnej zbroj", 2705),
+    "svitekZivotPozehnejbytosti": ItemTypeClass(Graphics["svitek"], "Pozehnej bytosti", 2705),
+    "svitekZivotPozehnejzbroj": ItemTypeClass(Graphics["svitek"], "Pozehnej zbroj", 2705),
     "svitekZivotNeutralizacejedu": ItemTypeClass(Graphics["svitek"], "Neutralizace jedu", 2705),
-    "svitekZivotSejmutikletby": ItemTypeClass(Graphics["svitek"], "Sejmutí kletby", 2705),
-    "svitekZivotBozipomoc": ItemTypeClass(Graphics["svitek"], "Boží pomoc", 2705),
+    "svitekZivotSejmutikletby": ItemTypeClass(Graphics["svitek"], "Sejmuti kletby", 2705),
+    "svitekZivotBozipomoc": ItemTypeClass(Graphics["svitek"], "Bozi pomoc", 2705),
     "svitekZivotAchillovapata": ItemTypeClass(Graphics["svitek"], "Achillova pata", 2705),
-    "svitekZivotUdernemrtveho": ItemTypeClass(Graphics["svitek"], "Udeř nemrtvého", 2705),
-    "svitekZivotZrannemrtveho": ItemTypeClass(Graphics["svitek"], "Zraň nemrtvého", 2705),
-    "svitekZivotZabijnemrtveho": ItemTypeClass(Graphics["svitek"], "Zabij nemrtvého", 2705),
-    "svitekZivotOchranaprednemrtvymi": ItemTypeClass(Graphics["svitek"], "Ochrana před nemrtvymi", 2705),
-    "svitekZivotOchranapredumrtim": ItemTypeClass(Graphics["svitek"], "Ochrana před úmrtím", 2705),
-    "svitekZivotSebeobetovani": ItemTypeClass(Graphics["svitek"], "Sebeobětování", 2705),
-    "svitekZivotPlosnaModlitba": ItemTypeClass(Graphics["svitek"], "Plošná Modlitba", 2705),
-    "svitekSmrtVysatienergie": ItemTypeClass(Graphics["svitek"], "Vysátí energie", 977),
-    "svitekSmrtZleznameni": ItemTypeClass(Graphics["svitek"], "Zlé znamení", 977),
+    "svitekZivotUdernemrtveho": ItemTypeClass(Graphics["svitek"], "Uder nemrtveho", 2705),
+    "svitekZivotZrannemrtveho": ItemTypeClass(Graphics["svitek"], "Zran nemrtveho", 2705),
+    "svitekZivotZabijnemrtveho": ItemTypeClass(Graphics["svitek"], "Zabij nemrtveho", 2705),
+    "svitekZivotOchranaprednemrtvymi": ItemTypeClass(Graphics["svitek"], "Ochrana pred nemrtvymi", 2705),
+    "svitekZivotOchranapredumrtim": ItemTypeClass(Graphics["svitek"], "Ochrana pred umrtim", 2705),
+    "svitekZivotSebeobetovani": ItemTypeClass(Graphics["svitek"], "Sebeobetovani", 2705),
+    "svitekZivotPlosnaModlitba": ItemTypeClass(Graphics["svitek"], "Plosna Modlitba", 2705),
+    "svitekSmrtVysatienergie": ItemTypeClass(Graphics["svitek"], "Vysati energie", 977),
+    "svitekSmrtZleznameni": ItemTypeClass(Graphics["svitek"], "Zle znameni", 977),
     "svitekSmrtJed": ItemTypeClass(Graphics["svitek"], "Jed", 977),
     "svitekSmrtParalyza": ItemTypeClass(Graphics["svitek"], "Paralyza", 977),
-    "svitekSmrtProklejpredmet": ItemTypeClass(Graphics["svitek"], "Proklej předmět", 977),
+    "svitekSmrtProklejpredmet": ItemTypeClass(Graphics["svitek"], "Proklej predmet", 977),
     "svitekSmrtNeohrabanost": ItemTypeClass(Graphics["svitek"], "Neohrabanost", 977),
-    "svitekSmrtMdlamysl": ItemTypeClass(Graphics["svitek"], "Mdlá mysl", 977),
+    "svitekSmrtMdlamysl": ItemTypeClass(Graphics["svitek"], "Mdla mysl", 977),
     "svitekSmrtSlabost": ItemTypeClass(Graphics["svitek"], "Slabost", 977),
     "svitekSmrtSlepota": ItemTypeClass(Graphics["svitek"], "Slepota", 977),
-    "svitekSmrtTemnezlo": ItemTypeClass(Graphics["svitek"], "Temné zlo", 977),
-    "svitekSmrtMucivabolest": ItemTypeClass(Graphics["svitek"], "Mučivá bolest", 977),
+    "svitekSmrtTemnezlo": ItemTypeClass(Graphics["svitek"], "Temne zlo", 977),
+    "svitekSmrtMucivabolest": ItemTypeClass(Graphics["svitek"], "Muciva bolest", 977),
     "svitekSmrtKouzlosmrti": ItemTypeClass(Graphics["svitek"], "Kouzlo smrti", 977),
-    "svitekSmrtObetovani": ItemTypeClass(Graphics["svitek"], "Obětování", 977),
-    "svitekSmrtParalyzacnipole": ItemTypeClass(Graphics["svitek"], "Paralyzační pole", 977),
-    "svitekSmrtSnizochranuvuciohni": ItemTypeClass(Graphics["svitek"], "Sniž ochranu vůči ohni", 977),
-    "svitekSmrtSnizochranuvucichladu": ItemTypeClass(Graphics["svitek"], "Sniž ochranu vůči chladu", 977),
-    "svitekSmrtSnizochranuvucienergii": ItemTypeClass(Graphics["svitek"], "Sniž ochranu vůči energii", 977),
-    "svitekSmrtSnizochranuvucikyseline": ItemTypeClass(Graphics["svitek"], "Sniž ochranu vůči kyselině", 977),
-    "svitekSmrtSnizochranuvucizlu": ItemTypeClass(Graphics["svitek"], "Sniž ochranu vůči zlu", 977),
-    "svitekSmrtDotykupira": ItemTypeClass(Graphics["svitek"], "Dotyk upíra", 977),
-    "svitekSmrtJedovepole": ItemTypeClass(Graphics["svitek"], "Jedové pole", 977),
-    "svitekSmrtOvladninemrtveho": ItemTypeClass(Graphics["svitek"], "Ovládni nemrtvého", 977),
-    "svitekSmrtOchromeni": ItemTypeClass(Graphics["svitek"], "Ochromení", 977),
+    "svitekSmrtObetovani": ItemTypeClass(Graphics["svitek"], "Obetovani", 977),
+    "svitekSmrtParalyzacnipole": ItemTypeClass(Graphics["svitek"], "Paralyzacni pole", 977),
+    "svitekSmrtSnizochranuvuciohni": ItemTypeClass(Graphics["svitek"], "Sniz ochranu vuci ohni", 977),
+    "svitekSmrtSnizochranuvucichladu": ItemTypeClass(Graphics["svitek"], "Sniz ochranu vuci chladu", 977),
+    "svitekSmrtSnizochranuvucienergii": ItemTypeClass(Graphics["svitek"], "Sniz ochranu vuci energii", 977),
+    "svitekSmrtSnizochranuvucikyseline": ItemTypeClass(Graphics["svitek"], "Sniz ochranu vuci kyseline", 977),
+    "svitekSmrtSnizochranuvucizlu": ItemTypeClass(Graphics["svitek"], "Sniz ochranu vuci zlu", 977),
+    "svitekSmrtDotykupira": ItemTypeClass(Graphics["svitek"], "Dotyk upira", 977),
+    "svitekSmrtJedovepole": ItemTypeClass(Graphics["svitek"], "Jedove pole", 977),
+    "svitekSmrtOvladninemrtveho": ItemTypeClass(Graphics["svitek"], "Ovladni nemrtveho", 977),
+    "svitekSmrtOchromeni": ItemTypeClass(Graphics["svitek"], "Ochromeni", 977),
     "svitekSmrtMor": ItemTypeClass(Graphics["svitek"], "Mor", 977),
-    "svitekSmrtPsychickyuder": ItemTypeClass(Graphics["svitek"], "Psychicky úder", 977),
-    "svitekSmrtMagickapouta": ItemTypeClass(Graphics["svitek"], "Magická pouta", 977),
+    "svitekSmrtPsychickyuder": ItemTypeClass(Graphics["svitek"], "Psychicky uder", 977),
+    "svitekSmrtMagickapouta": ItemTypeClass(Graphics["svitek"], "Magicka pouta", 977),
     "svitekSmrtDoteksmrti": ItemTypeClass(Graphics["svitek"], "Dotek smrti", 977),
-    "svitekSmrtSnizodolnostvuciparalyze": ItemTypeClass(Graphics["svitek"], "Sniž odolnost vůči paralyze", 977),
-    "svitekSmrtSnizodolnostvucijedu": ItemTypeClass(Graphics["svitek"], "Sniž odolnost vůči jedu", 977),
-    "svitekSmrtSnizodolnostvucizivotu": ItemTypeClass(Graphics["svitek"], "Sniž odolnost vůči životu", 977),
-    "svitekSmrtSnizodolnostvucismrti": ItemTypeClass(Graphics["svitek"], "Sniž odolnost vůči smrti", 977),
-    "svitekSmrtSnizodolnostvuciradu": ItemTypeClass(Graphics["svitek"], "Sniž odolnost vůči řádu", 977),
-    "svitekSmrtSnizodolnostvucichaosu": ItemTypeClass(Graphics["svitek"], "Sniž odolnost vůči chaosu", 977),
-    "svitekSmrtSnizodolnostvuciprirode": ItemTypeClass(Graphics["svitek"], "Sniž odolnost vůči přírodě", 977),
+    "svitekSmrtSnizodolnostvuciparalyze": ItemTypeClass(Graphics["svitek"], "Sniz odolnost vuci paralyze", 977),
+    "svitekSmrtSnizodolnostvucijedu": ItemTypeClass(Graphics["svitek"], "Sniz odolnost vuci jedu", 977),
+    "svitekSmrtSnizodolnostvucizivotu": ItemTypeClass(Graphics["svitek"], "Sniz odolnost vuci zivotu", 977),
+    "svitekSmrtSnizodolnostvucismrti": ItemTypeClass(Graphics["svitek"], "Sniz odolnost vuci smrti", 977),
+    "svitekSmrtSnizodolnostvuciradu": ItemTypeClass(Graphics["svitek"], "Sniz odolnost vuci radu", 977),
+    "svitekSmrtSnizodolnostvucichaosu": ItemTypeClass(Graphics["svitek"], "Sniz odolnost vuci chaosu", 977),
+    "svitekSmrtSnizodolnostvuciprirode": ItemTypeClass(Graphics["svitek"], "Sniz odolnost vuci prirode", 977),
     "svitekSmrtNemotornost": ItemTypeClass(Graphics["svitek"], "Nemotornost", 977),
     "svitekSmrtKletba": ItemTypeClass(Graphics["svitek"], "Kletba", 977),
-    "svitekSmrtProrazstit": ItemTypeClass(Graphics["svitek"], "Proraž štít", 977),
-    "svitekSmrtPlosnesnizeniochranyvuciohni": ItemTypeClass(Graphics["svitek"], "Plošné snížení ochrany vůči ohni", 977),
-    "svitekSmrtPlosnesnizeniochranyvucichladu": ItemTypeClass(Graphics["svitek"], "Plošné snížení ochrany vůči chladu", 977),
-    "svitekSmrtPlosnesnizeniochranyvucienergii": ItemTypeClass(Graphics["svitek"], "Plošné snížení ochrany vůči energii", 977),
-    "svitekSmrtPlosnesnizeniochranyvucikyseline": ItemTypeClass(Graphics["svitek"], "Plošné snížení ochrany vůči kyselině", 977),
-    "svitekSmrtPlosnesnizeniochranyvucizlu": ItemTypeClass(Graphics["svitek"], "Plošné snížení ochrany vůči zlu", 977),
-    "svitekRadOdzbrojeni": ItemTypeClass(Graphics["svitek"], "Odzbrojení", 2934),
-    "svitekRadSeslani": ItemTypeClass(Graphics["svitek"], "Seslání", 2934),
-    "svitekRadOchranapredparalyzou": ItemTypeClass(Graphics["svitek"], "Ochrana před paralyzou", 2934),
-    "svitekRadOchranapredjedem": ItemTypeClass(Graphics["svitek"], "Ochrana před jedem", 2934),
-    "svitekRadOchranapredkouzlem": ItemTypeClass(Graphics["svitek"], "Ochrana před kouzlem", 2934),
+    "svitekSmrtProrazstit": ItemTypeClass(Graphics["svitek"], "Proraz stit", 977),
+    "svitekSmrtPlosnesnizeniochranyvuciohni": ItemTypeClass(Graphics["svitek"], "Plosne snizeni ochrany vuci ohni", 977),
+    "svitekSmrtPlosnesnizeniochranyvucichladu": ItemTypeClass(Graphics["svitek"], "Plosne snizeni ochrany vuci chladu", 977),
+    "svitekSmrtPlosnesnizeniochranyvucienergii": ItemTypeClass(Graphics["svitek"], "Plosne snizeni ochrany vuci energii", 977),
+    "svitekSmrtPlosnesnizeniochranyvucikyseline": ItemTypeClass(Graphics["svitek"], "Plosne snizeni ochrany vuci kyseline", 977),
+    "svitekSmrtPlosnesnizeniochranyvucizlu": ItemTypeClass(Graphics["svitek"], "Plosne snizeni ochrany vuci zlu", 977),
+    "svitekRadOdzbrojeni": ItemTypeClass(Graphics["svitek"], "Odzbrojeni", 2934),
+    "svitekRadSeslani": ItemTypeClass(Graphics["svitek"], "Seslani", 2934),
+    "svitekRadOchranapredparalyzou": ItemTypeClass(Graphics["svitek"], "Ochrana pred paralyzou", 2934),
+    "svitekRadOchranapredjedem": ItemTypeClass(Graphics["svitek"], "Ochrana pred jedem", 2934),
+    "svitekRadOchranapredkouzlem": ItemTypeClass(Graphics["svitek"], "Ochrana pred kouzlem", 2934),
     "svitekRadDotekledu": ItemTypeClass(Graphics["svitek"], "Dotek ledu", 2934),
-    "svitekRadOchranapredmagickymoborem(zivot)": ItemTypeClass(Graphics["svitek"], "Ochrana před magickym oborem (život)", 2934),
-    "svitekRadOchranapredmagickymoborem(smrt)": ItemTypeClass(Graphics["svitek"], "Ochrana před magickym oborem (smrt)", 2934),
-    "svitekRadOchranapredmagickymoborem(materie)": ItemTypeClass(Graphics["svitek"], "Ochrana před magickym oborem (materie)", 2934),
-    "svitekRadOchranapredmagickymoborem(chaos)": ItemTypeClass(Graphics["svitek"], "Ochrana před magickym oborem (chaos)", 2934),
-    "svitekRadOchranapredmagickymoborem(priroda)": ItemTypeClass(Graphics["svitek"], "Ochrana před magickym oborem (příroda)", 2934),
-    "svitekRadOchranapredmagii": ItemTypeClass(Graphics["svitek"], "Ochrana před magií", 2934),
-    "svitekRadMagickazbroj": ItemTypeClass(Graphics["svitek"], "Magická zbroj", 2934),
-    "svitekRadRozptylenimagie": ItemTypeClass(Graphics["svitek"], "Rozptylení magie", 2934),
-    "svitekRadPlosnerozptylenimagie": ItemTypeClass(Graphics["svitek"], "Plošné rozptylení magie", 2934),
-    "svitekRadLedovaboure": ItemTypeClass(Graphics["svitek"], "Ledová bouře", 2934),
-    "svitekRadOdrazeniutoku": ItemTypeClass(Graphics["svitek"], "Odražení útoku", 2934),
+    "svitekRadOchranapredmagickymoborem(zivot)": ItemTypeClass(Graphics["svitek"], "Ochrana pred magickym oborem (zivot)", 2934),
+    "svitekRadOchranapredmagickymoborem(smrt)": ItemTypeClass(Graphics["svitek"], "Ochrana pred magickym oborem (smrt)", 2934),
+    "svitekRadOchranapredmagickymoborem(materie)": ItemTypeClass(Graphics["svitek"], "Ochrana pred magickym oborem (materie)", 2934),
+    "svitekRadOchranapredmagickymoborem(chaos)": ItemTypeClass(Graphics["svitek"], "Ochrana pred magickym oborem (chaos)", 2934),
+    "svitekRadOchranapredmagickymoborem(priroda)": ItemTypeClass(Graphics["svitek"], "Ochrana pred magickym oborem (priroda)", 2934),
+    "svitekRadOchranapredmagii": ItemTypeClass(Graphics["svitek"], "Ochrana pred magii", 2934),
+    "svitekRadMagickazbroj": ItemTypeClass(Graphics["svitek"], "Magicka zbroj", 2934),
+    "svitekRadRozptylenimagie": ItemTypeClass(Graphics["svitek"], "Rozptyleni magie", 2934),
+    "svitekRadPlosnerozptylenimagie": ItemTypeClass(Graphics["svitek"], "Plosne rozptyleni magie", 2934),
+    "svitekRadLedovaboure": ItemTypeClass(Graphics["svitek"], "Ledova boure", 2934),
+    "svitekRadOdrazeniutoku": ItemTypeClass(Graphics["svitek"], "Odrazeni utoku", 2934),
     "svitekRadNajdikouzla": ItemTypeClass(Graphics["svitek"], "Najdi kouzla", 2934),
     "svitekRadTicho": ItemTypeClass(Graphics["svitek"], "Ticho", 2934),
-    "svitekRadUmlceni": ItemTypeClass(Graphics["svitek"], "Umlčení", 2934),
-    "svitekRadMagickacepel": ItemTypeClass(Graphics["svitek"], "Magická čepel", 2934),
+    "svitekRadUmlceni": ItemTypeClass(Graphics["svitek"], "Umlceni", 2934),
+    "svitekRadMagickacepel": ItemTypeClass(Graphics["svitek"], "Magicka cepel", 2934),
     "svitekRadSejmikouzlo": ItemTypeClass(Graphics["svitek"], "Sejmi kouzlo", 2934),
-    "svitekRadOdrazkouzlo": ItemTypeClass(Graphics["svitek"], "Odraž kouzlo", 2934),
-    "svitekRadOdhaleni": ItemTypeClass(Graphics["svitek"], "Odhalení", 2934),
+    "svitekRadOdrazkouzlo": ItemTypeClass(Graphics["svitek"], "Odraz kouzlo", 2934),
+    "svitekRadOdhaleni": ItemTypeClass(Graphics["svitek"], "Odhaleni", 2934),
     "svitekRadPastnakouzla": ItemTypeClass(Graphics["svitek"], "Past na kouzla", 2934),
-    "svitekRadMihotani": ItemTypeClass(Graphics["svitek"], "Mihotání", 2934),
-    "svitekRadRozptyleniprokleti": ItemTypeClass(Graphics["svitek"], "Rozptylení prokletí", 2934),
-    "svitekChaosOhnivakoule": ItemTypeClass(Graphics["svitek"], "Ohnivá koule", 2878),
-    "svitekChaosOhnivepole": ItemTypeClass(Graphics["svitek"], "Ohnivé pole", 2878),
-    "svitekChaosOcistaohnem": ItemTypeClass(Graphics["svitek"], "Očista ohněm", 2878),
-    "svitekChaosOhniveplameny": ItemTypeClass(Graphics["svitek"], "Ohnivé plameny", 2878),
-    "svitekChaosChodiciplameny": ItemTypeClass(Graphics["svitek"], "Chodící plameny", 2878),
+    "svitekRadMihotani": ItemTypeClass(Graphics["svitek"], "Mihotani", 2934),
+    "svitekRadRozptyleniprokleti": ItemTypeClass(Graphics["svitek"], "Rozptyleni prokleti", 2934),
+    "svitekChaosOhnivakoule": ItemTypeClass(Graphics["svitek"], "Ohniva koule", 2878),
+    "svitekChaosOhnivepole": ItemTypeClass(Graphics["svitek"], "Ohnive pole", 2878),
+    "svitekChaosOcistaohnem": ItemTypeClass(Graphics["svitek"], "Ocista ohnem", 2878),
+    "svitekChaosOhniveplameny": ItemTypeClass(Graphics["svitek"], "Ohnive plameny", 2878),
+    "svitekChaosChodiciplameny": ItemTypeClass(Graphics["svitek"], "Chodici plameny", 2878),
     "svitekChaosOhnivykruh": ItemTypeClass(Graphics["svitek"], "Ohnivy kruh", 2878),
     "svitekChaosEfreet": ItemTypeClass(Graphics["svitek"], "Efreet", 2878),
     "svitekChaosExploze": ItemTypeClass(Graphics["svitek"], "Exploze", 2878),
-    "svitekChaosOhnivyuder": ItemTypeClass(Graphics["svitek"], "Ohnivy úder", 2878),
+    "svitekChaosOhnivyuder": ItemTypeClass(Graphics["svitek"], "Ohnivy uder", 2878),
     "svitekChaosDechdraka": ItemTypeClass(Graphics["svitek"], "Dech draka", 2878),
-    "svitekChaosEnergetickastrela": ItemTypeClass(Graphics["svitek"], "Energetická střela", 2878),
-    "svitekChaosKaskada": ItemTypeClass(Graphics["svitek"], "Kaskáda", 2878),
-    "svitekChaosPlanoucihul": ItemTypeClass(Graphics["svitek"], "Planoucí hůl", 2878),
-    "svitekChaosMagickapouta": ItemTypeClass(Graphics["svitek"], "Magická pouta", 2878),
-    "svitekChaosNeznamost": ItemTypeClass(Graphics["svitek"], "Neznámost", 2878),
+    "svitekChaosEnergetickastrela": ItemTypeClass(Graphics["svitek"], "Energeticka strela", 2878),
+    "svitekChaosKaskada": ItemTypeClass(Graphics["svitek"], "Kaskada", 2878),
+    "svitekChaosPlanoucihul": ItemTypeClass(Graphics["svitek"], "Planouci hul", 2878),
+    "svitekChaosMagickapouta": ItemTypeClass(Graphics["svitek"], "Magicka pouta", 2878),
+    "svitekChaosNeznamost": ItemTypeClass(Graphics["svitek"], "Neznamost", 2878),
     "svitekChaosMeteorickyroj": ItemTypeClass(Graphics["svitek"], "Meteoricky roj", 2878),
-    "svitekChaosOhnivystit": ItemTypeClass(Graphics["svitek"], "Ohnivy štít", 2878),
-    "svitekChaosBranapekel": ItemTypeClass(Graphics["svitek"], "Brána pekel", 2878),
+    "svitekChaosOhnivystit": ItemTypeClass(Graphics["svitek"], "Ohnivy stit", 2878),
+    "svitekChaosBranapekel": ItemTypeClass(Graphics["svitek"], "Brana pekel", 2878),
     "svitekChaosKulovyblesk": ItemTypeClass(Graphics["svitek"], "Kulovy blesk", 2878),
     "svitekChaosStrach": ItemTypeClass(Graphics["svitek"], "Strach", 2878),
-    "svitekChaosMagickystit": ItemTypeClass(Graphics["svitek"], "Magicky štít", 2878),
-    "svitekChaosElementalnivyboj": ItemTypeClass(Graphics["svitek"], "Elementální vyboj", 2878),
-    "svitekChaosPromenavBeholdera": ItemTypeClass(Graphics["svitek"], "Proměna v Beholdera", 2878),
-    "svitekPrirodaPrevodsily": ItemTypeClass(Graphics["svitek"], "Převod síly", 1368),
-    "svitekPrirodaZkameneni": ItemTypeClass(Graphics["svitek"], "Zkamenění", 1368),
-    "svitekPrirodaOdkameneni": ItemTypeClass(Graphics["svitek"], "Odkamenění", 1368),
-    "svitekPrirodaSvetlo": ItemTypeClass(Graphics["svitek"], "Světlo", 1368),
-    "svitekPrirodaKoreny": ItemTypeClass(Graphics["svitek"], "Kořeny", 1368),
+    "svitekChaosMagickystit": ItemTypeClass(Graphics["svitek"], "Magicky stit", 2878),
+    "svitekChaosElementalnivyboj": ItemTypeClass(Graphics["svitek"], "Elementalni vyboj", 2878),
+    "svitekChaosPromenavBeholdera": ItemTypeClass(Graphics["svitek"], "Promena v Beholdera", 2878),
+    "svitekPrirodaPrevodsily": ItemTypeClass(Graphics["svitek"], "Prevod sily", 1368),
+    "svitekPrirodaZkameneni": ItemTypeClass(Graphics["svitek"], "Zkameneni", 1368),
+    "svitekPrirodaOdkameneni": ItemTypeClass(Graphics["svitek"], "Odkameneni", 1368),
+    "svitekPrirodaSvetlo": ItemTypeClass(Graphics["svitek"], "Svetlo", 1368),
+    "svitekPrirodaKoreny": ItemTypeClass(Graphics["svitek"], "Koreny", 1368),
     "svitekPrirodaMlha": ItemTypeClass(Graphics["svitek"], "Mlha", 1368),
-    "svitekPrirodaLvisila": ItemTypeClass(Graphics["svitek"], "Lví síla", 1368),
-    "svitekPrirodaBoure": ItemTypeClass(Graphics["svitek"], "Bouře", 1368),
-    "svitekPrirodaDracikuze": ItemTypeClass(Graphics["svitek"], "Dračí kůže", 1368),
+    "svitekPrirodaLvisila": ItemTypeClass(Graphics["svitek"], "Lvi sila", 1368),
+    "svitekPrirodaBoure": ItemTypeClass(Graphics["svitek"], "Boure", 1368),
+    "svitekPrirodaDracikuze": ItemTypeClass(Graphics["svitek"], "Draci kuze", 1368),
     "svitekPrirodaChameleon": ItemTypeClass(Graphics["svitek"], "Chameleon", 1368),
-    "svitekPrirodaOchranaprotizelezu": ItemTypeClass(Graphics["svitek"], "Ochrana proti železu", 1368),
+    "svitekPrirodaOchranaprotizelezu": ItemTypeClass(Graphics["svitek"], "Ochrana proti zelezu", 1368),
     "svitekPrirodaOchranaprotioceli": ItemTypeClass(Graphics["svitek"], "Ochrana proti oceli", 1368),
-    "svitekPrirodaOchranaprotimedi": ItemTypeClass(Graphics["svitek"], "Ochrana proti mědi", 1368),
-    "svitekPrirodaOchranaprotistribru": ItemTypeClass(Graphics["svitek"], "Ochrana proti stříbru", 1368),
+    "svitekPrirodaOchranaprotimedi": ItemTypeClass(Graphics["svitek"], "Ochrana proti medi", 1368),
+    "svitekPrirodaOchranaprotistribru": ItemTypeClass(Graphics["svitek"], "Ochrana proti stribru", 1368),
     "svitekPrirodaOchranaprotizlatu": ItemTypeClass(Graphics["svitek"], "Ochrana proti zlatu", 1368),
     "svitekPrirodaD'ao": ItemTypeClass(Graphics["svitek"], "D'ao", 1368),
-    "svitekPrirodaMarid": ItemTypeClass(Graphics["svitek"], "Márid", 1368),
+    "svitekPrirodaMarid": ItemTypeClass(Graphics["svitek"], "Marid", 1368),
     "svitekPrirodaGenie": ItemTypeClass(Graphics["svitek"], "Genie", 1368),
-    "svitekPrirodaZemetreseni": ItemTypeClass(Graphics["svitek"], "Zemětřesení", 1368),
+    "svitekPrirodaZemetreseni": ItemTypeClass(Graphics["svitek"], "Zemetreseni", 1368),
     "svitekPrirodaTelekineze": ItemTypeClass(Graphics["svitek"], "Telekineze", 1368),
-    "svitekPrirodaKocicimrstnost": ItemTypeClass(Graphics["svitek"], "Kočičí mrštnost", 1368),
-    "svitekPrirodaDracimoudrost": ItemTypeClass(Graphics["svitek"], "Dračí moudrost", 1368),
+    "svitekPrirodaKocicimrstnost": ItemTypeClass(Graphics["svitek"], "Kocici mrstnost", 1368),
+    "svitekPrirodaDracimoudrost": ItemTypeClass(Graphics["svitek"], "Draci moudrost", 1368),
     "svitekPrirodaBlesk": ItemTypeClass(Graphics["svitek"], "Blesk", 1368),
-    "svitekPrirodaOzivenizvere": ItemTypeClass(Graphics["svitek"], "Oživení zvěře", 1368),
-    "svitekPrirodaRust": ItemTypeClass(Graphics["svitek"], "Růst", 1368),
-    "svitekPrirodaZivyplot": ItemTypeClass(Graphics["svitek"], "Živy plot", 1368),
-    "svitekPrirodaZahradka": ItemTypeClass(Graphics["svitek"], "Zahrádka", 1368),
-    "svitekPrirodaKyselaslina": ItemTypeClass(Graphics["svitek"], "Kyselá slina", 1368),
-    "svitekPrirodaHromadnesvetlo": ItemTypeClass(Graphics["svitek"], "Hromadné světlo", 1368),
+    "svitekPrirodaOzivenizvere": ItemTypeClass(Graphics["svitek"], "Oziveni zvere", 1368),
+    "svitekPrirodaRust": ItemTypeClass(Graphics["svitek"], "Rust", 1368),
+    "svitekPrirodaZivyplot": ItemTypeClass(Graphics["svitek"], "Zivy plot", 1368),
+    "svitekPrirodaZahradka": ItemTypeClass(Graphics["svitek"], "Zahradka", 1368),
+    "svitekPrirodaKyselaslina": ItemTypeClass(Graphics["svitek"], "Kysela slina", 1368),
+    "svitekPrirodaHromadnesvetlo": ItemTypeClass(Graphics["svitek"], "Hromadne svetlo", 1368),
     "svitekPrirodaKyselinovymrak": ItemTypeClass(Graphics["svitek"], "Kyselinovy mrak", 1368),
-    "svitekPrirodaPromenavpostrachlesa": ItemTypeClass(Graphics["svitek"], "Proměna v postrach lesa", 1368),
-    "svitekPrirodaOchranapromeny": ItemTypeClass(Graphics["svitek"], "Ochrana proměny", 1368),
+    "svitekPrirodaPromenavpostrachlesa": ItemTypeClass(Graphics["svitek"], "Promena v postrach lesa", 1368),
+    "svitekPrirodaOchranapromeny": ItemTypeClass(Graphics["svitek"], "Ochrana promeny", 1368),
     "svitekPrvniStupenTeleportace": ItemTypeClass(Graphics["svitek"], "Teleportace", 0),
-    "svitekPrvniStupenUbliz": ItemTypeClass(Graphics["svitek"], "Ubliž", 0),
-    "svitekPrvniStupenOvazranu": ItemTypeClass(Graphics["svitek"], "Ovaž ránu", 0),
-    "svitekPrvniStupenMagickasipka": ItemTypeClass(Graphics["svitek"], "Magická šipka", 0),
-    "svitekPrvniStupenPlaminek": ItemTypeClass(Graphics["svitek"], "Plamínek", 0),
-    "svitekPrvniStupenPromenavbludicku": ItemTypeClass(Graphics["svitek"], "Proměna v bludičku", 0),	
+    "svitekPrvniStupenUbliz": ItemTypeClass(Graphics["svitek"], "Ubliz", 0),
+    "svitekPrvniStupenOvazranu": ItemTypeClass(Graphics["svitek"], "Ovaz ranu", 0),
+    "svitekPrvniStupenMagickasipka": ItemTypeClass(Graphics["svitek"], "Magicka sipka", 0),
+    "svitekPrvniStupenPlaminek": ItemTypeClass(Graphics["svitek"], "Plaminek", 0),
+    "svitekPrvniStupenPromenavbludicku": ItemTypeClass(Graphics["svitek"], "Promena v bludicku", 0),	
 }
 
 MultiTypes = {
@@ -680,7 +759,7 @@ MultiTypes = {
 		Graphics["gemsAmetyst"],
 		Graphics["gems"], Graphics["gems3"], Graphics["gems4"],
 	],
-	"throphy": [15170, Graphics["kokosoveOrechy"], 5640, 7408, 15174, 5357, ],
+	"trophies": [Types["trophy_zmije"],Types["trophy_kobra"],Types["trophy_mamba"],Types["trophy_anakonda"],Types["trophy_obri_pavouk"],Types["trophy_desivy_pavouk"],Types["trophy_sklipkan"],Types["trophy_upiriho_pavouka"],Types["trophy_vtackar"],Types["trophy_snovac"],Types["trophy_cerna_vdova"],Types["trophy_tarantule"],Types["trophy_vrrk"],Types["trophy_skret"],Types["trophy_aligator"],Types["trophy_jesterak"],Types["trophy_gorila"],Types["trophy_mephitis"],Types["trophy_katakan"],Types["trophy_parasekt"],Types["trophy_zabi_matka"],Types["trophy_druid"],Types["trophy_dabel"],Types["trophy_strazny_golem"],Types["trophy_golem_strazce"],Types["trophy_kuresekt"],Types["trophy_kurekral"],Types["trophy_minotaur"],Types["trophy_vudce_lidozroutu"],Types["trophy_pavouci_kral"],Types["trophy_pavouci_kralovna"], ],
 	"rudy": [
 		ItemTypeClass([6585, 6584, 6586, 3978, 6583], ["ruda", "rudy"])
 	],
@@ -694,7 +773,7 @@ MultiTypes = {
 	],
 	"rostlinkyZasazene": [
 		Types["rostlinkaZasazenaMandragora"], Types["rostlinkaZasazenaRulik"], Graphics["rostlinkaZasazenaZensen"],
-		Graphics["rostlinkaZasazenaCesnek"], Graphics["rostlinkaZasazenaBavlna"],
+		Graphics["rostlinkaZasazenaCesnek"], Graphics["rostlinkaZasazenaBavlna"], 0x3bb8, 0xf83, 0xf79
 	],
 	"rostlinkyVytrzena": [
 		Graphics["rostlinkaVytrzenaZensen"], Graphics["rostlinkaVytrzenaMandragora"],
@@ -729,4 +808,38 @@ MultiTypes = {
 	"ryby": [
 		Types["jeseter"], Types["sumec"], Types["kapr"], Types["zlataryba"], Types["stika"], Types["okoun"], Types["lin"], Types["candat"], Graphics["lviryby"], Graphics["letajiciryby"], Graphics["perletoveryby"], Graphics["uhor"]
 	]
+}
+
+TrophyPrices = {
+	"trophy_zmije": 60,
+	"trophy_kobra": 80,
+	"trophy_mamba": 120,
+	"trophy_anakonda": 150,
+	"trophy_obri_pavouk": 16,
+	"trophy_desivy_pavouk": 100,
+	"trophy_sklipkan": 40,
+	"trophy_upiriho_pavouka": 200,
+	"trophy_vtackar": 70,
+	"trophy_snovac": 220,
+	"trophy_cerna_vdova": 300,
+	"trophy_tarantule": 1000,
+	"trophy_vrrk": 35,
+	"trophy_skret": 13,
+	"trophy_aligator": 25,
+	"trophy_jesterak": 12,
+	"trophy_gorila": 25,
+	"trophy_mephitis": 4900,
+	"trophy_katakan": 6500,
+	"trophy_parasekt": 5500,
+	"trophy_zabi_matka": 2500,
+	"trophy_druid": 3500,
+	"trophy_dabel": 8500,
+	"trophy_strazny_golem": 7500,
+	"trophy_golem_strazce": 5500,
+	"trophy_kuresekt": 3000,
+	"trophy_kurekral": 3000,
+	"trophy_minotaur": 9000,
+	"trophy_vudce_lidozroutu": 6500,
+	"trophy_pavouci_kral": 11000,
+	"trophy_pavouci_kralovna": 1900,
 }

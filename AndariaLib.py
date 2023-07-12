@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #AndariaLibrary
-Version = "1.0.6"
+Version = "1.0.7"
 
 from AndariaTypes import *
 
@@ -156,6 +156,11 @@ def FindTypeBy(itemType, range=None, container=None, minAmount = None, returnAll
 	found = sortedByDistance[0]
 	SetAlias("found", found.Serial)
 	return found
+        
+def UseObjectBy(itemType, range = None, container = None):
+    item = FindTypeBy(itemType, range, container)
+    if item is not None:
+        UseObject(item)
 
 #Funkce pro přesun itemu
 #args - %1 TYPE Itemu
@@ -593,3 +598,18 @@ def WaitForSave():
 		SysMessageBlue("Bude save, pozastavuji skript..")
 		WaitForJournal('Svìt se zase zaèal toèit', 20000)
 		ClearJournal()
+
+def FormatGold(value):
+    copper = value % 10
+    value -= copper
+    silver = value % 100
+    value -= silver
+    gold = value / 100
+    str = ""
+    if gold > 0:
+        str += "{0}zl ".format(gold)
+    if silver > 0:
+        str += "{0}st ".format(gold)
+    if copper > 0:
+        str += "{0}md".format(copper)
+    return str
